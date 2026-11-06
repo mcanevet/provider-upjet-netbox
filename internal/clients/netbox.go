@@ -3,6 +3,7 @@ package clients
 import (
 	"context"
 	"encoding/json"
+	"strconv"
 
 	"github.com/crossplane/crossplane-runtime/v2/pkg/resource"
 	"github.com/pkg/errors"
@@ -24,8 +25,17 @@ const (
 	errUnmarshalCredentials = "cannot unmarshal netbox credentials as JSON"
 
 	// provider configuration keys
-	keyServerURL = "server_url"
-	keyAPIToken  = "api_token"
+	keyServerURL      = "server_url"
+	keyAPIToken       = "api_token"
+	keyRequestTimeout = "request_timeout"
+
+	// defaultRequestTimeout is the NetBox API request timeout, in seconds,
+	// used when the credentials do not set request_timeout. The Terraform
+	// provider defaults to 10s (provider_gen.go in terraform-provider-netbox
+	// v6.0.0), which is too short: when a create outlasts it, NetBox still
+	// creates the object but Terraform records nothing, so the object is
+	// orphaned and every retry fails on NetBox's uniqueness constraints.
+	defaultRequestTimeout = 60
 )
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
@@ -49,24 +59,70 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		if err != nil {
 			return ps, errors.Wrap(err, errExtractCredentials)
 		}
-		creds := map[string]string{}
+		creds := map[string]any{}
 		if err := json.Unmarshal(data, &creds); err != nil {
 			return ps, errors.Wrap(err, errUnmarshalCredentials)
 		}
-
-		// Set credentials in the e-breuninger/netbox provider configuration.
-		// Both are required by the provider's Configure (provider_gen.go in
-		// terraform-provider-netbox v6.0.0) unless the NETBOX_SERVER_URL /
-		// NETBOX_API_TOKEN env vars are set, which we do not rely on here.
-		if creds[keyServerURL] == "" || creds[keyAPIToken] == "" {
-			return ps, errors.Errorf("credentials must contain non-empty %q and %q keys", keyServerURL, keyAPIToken)
+		cfg, err := providerConfiguration(creds)
+		if err != nil {
+			return ps, err
 		}
-		ps.Configuration = map[string]any{
-			keyServerURL: creds[keyServerURL],
-			keyAPIToken:  creds[keyAPIToken],
-		}
+		ps.Configuration = cfg
 		return ps, nil
 	}
+}
+
+// providerConfiguration maps the ProviderConfig credentials (a JSON object) to
+// the e-breuninger/netbox provider configuration.
+//
+// server_url and api_token are required: the provider's Configure requires
+// both unless the NETBOX_SERVER_URL / NETBOX_API_TOKEN env vars are set, which
+// we do not rely on. request_timeout is optional, in seconds, as a JSON number
+// or a numeric string; it defaults to defaultRequestTimeout.
+func providerConfiguration(creds map[string]any) (map[string]any, error) {
+	serverURL, _ := creds[keyServerURL].(string)
+	apiToken, _ := creds[keyAPIToken].(string)
+	if serverURL == "" || apiToken == "" {
+		return nil, errors.Errorf("credentials must contain non-empty string %q and %q keys", keyServerURL, keyAPIToken)
+	}
+
+	timeout := int64(defaultRequestTimeout)
+	if v, ok := creds[keyRequestTimeout]; ok {
+		var err error
+		if timeout, err = parseSeconds(v); err != nil {
+			return nil, errors.Wrapf(err, "invalid %q in credentials", keyRequestTimeout)
+		}
+	}
+
+	return map[string]any{
+		keyServerURL:      serverURL,
+		keyAPIToken:       apiToken,
+		keyRequestTimeout: timeout,
+	}, nil
+}
+
+// parseSeconds accepts a positive whole number of seconds as a JSON number
+// (decoded as float64) or a numeric string.
+func parseSeconds(v any) (int64, error) {
+	var n int64
+	switch t := v.(type) {
+	case float64:
+		if t != float64(int64(t)) {
+			return 0, errors.Errorf("not a whole number of seconds: %v", t)
+		}
+		n = int64(t)
+	case string:
+		var err error
+		if n, err = strconv.ParseInt(t, 10, 64); err != nil {
+			return 0, errors.Errorf("not a whole number of seconds: %q", t)
+		}
+	default:
+		return 0, errors.Errorf("must be a number of seconds, got %T", v)
+	}
+	if n <= 0 {
+		return 0, errors.Errorf("must be positive, got %d", n)
+	}
+	return n, nil
 }
 
 func toSharedPCSpec(pc *clusterv1beta1.ProviderConfig) (*namespacedv1beta1.ProviderConfigSpec, error) {

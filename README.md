@@ -30,8 +30,15 @@ Namespaced variants live under `*.netbox.m.crossplane.io`.
 The ProviderConfig secret must hold a JSON document:
 
 ```json
-{"server_url": "https://netbox.example.com", "api_token": "..."}
+{"server_url": "https://netbox.example.com", "api_token": "...", "request_timeout": 60}
 ```
+
+`request_timeout` (seconds, optional) defaults to 60, not the Terraform
+provider's 10. If a create takes NetBox longer than the timeout, NetBox still
+creates the object but the provider never learns its ID: the object is
+orphaned and the managed resource keeps failing on NetBox's uniqueness
+constraints until the orphan is deleted, or its ID is set as the managed
+resource's `crossplane.io/external-name`.
 
 ## Developing
 
