@@ -16,17 +16,17 @@ func TestProviderConfiguration(t *testing.T) {
 		"DefaultTimeout": {
 			reason: "Without request_timeout, the provider gets our 60s default rather than its own 10s.",
 			creds:  `{"server_url":"http://netbox:8080","api_token":"t"}`,
-			want:   map[string]any{"server_url": "http://netbox:8080", "api_token": "t", "request_timeout": int64(60)},
+			want:   map[string]any{"server_url": "http://netbox:8080", "api_token": "t", "request_timeout": int64(60), "skip_version_check": true},
 		},
 		"TimeoutAsNumber": {
 			reason: "request_timeout can be a JSON number.",
 			creds:  `{"server_url":"u","api_token":"t","request_timeout":120}`,
-			want:   map[string]any{"server_url": "u", "api_token": "t", "request_timeout": int64(120)},
+			want:   map[string]any{"server_url": "u", "api_token": "t", "request_timeout": int64(120), "skip_version_check": true},
 		},
 		"TimeoutAsString": {
 			reason: "request_timeout can be a numeric string, as Secret values often are.",
 			creds:  `{"server_url":"u","api_token":"t","request_timeout":"30"}`,
-			want:   map[string]any{"server_url": "u", "api_token": "t", "request_timeout": int64(30)},
+			want:   map[string]any{"server_url": "u", "api_token": "t", "request_timeout": int64(30), "skip_version_check": true},
 		},
 		"MissingServerURL": {
 			reason:  "server_url is required.",

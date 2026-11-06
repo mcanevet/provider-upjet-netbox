@@ -5,12 +5,26 @@ import (
 	_ "embed"
 
 	ujconfig "github.com/crossplane/upjet/v2/pkg/config"
+	fwprovider "github.com/hashicorp/terraform-plugin-framework/provider"
+
+	netboxprovider "github.com/e-breuninger/terraform-provider-netbox/provider"
 )
 
 const (
 	resourcePrefix = "netbox"
 	modulePath     = "github.com/mcanevet/provider-upjet-netbox"
 )
+
+// terraformProviderVersion is reported by the in-process provider; it must
+// match TERRAFORM_PROVIDER_VERSION in the Makefile (config/schema.json was
+// generated from that release).
+const terraformProviderVersion = "6.0.0"
+
+// FrameworkProvider returns the e-breuninger/netbox provider, served
+// in-process (upjet's no-fork mode) instead of through the Terraform CLI.
+func FrameworkProvider() fwprovider.Provider {
+	return netboxprovider.New(terraformProviderVersion)()
+}
 
 //go:embed schema.json
 var providerSchema string
@@ -22,7 +36,11 @@ var providerMetadata string
 func GetProvider() *ujconfig.Provider {
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
 		ujconfig.WithRootGroup("netbox.crossplane.io"),
-		ujconfig.WithIncludeList(ExternalNameConfigured()),
+		// The CLI include list defaults to every resource: empty it, so that
+		// all resources are served in-process.
+		ujconfig.WithIncludeList([]string{}),
+		ujconfig.WithTerraformPluginFrameworkIncludeList(ExternalNameConfigured()),
+		ujconfig.WithTerraformPluginFrameworkProvider(FrameworkProvider()),
 		ujconfig.WithFeaturesPackage("internal/features"),
 		ujconfig.WithDefaultResourceOptions(
 			ExternalNameConfigurations(),
@@ -44,7 +62,11 @@ func GetProvider() *ujconfig.Provider {
 func GetProviderNamespaced() *ujconfig.Provider {
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
 		ujconfig.WithRootGroup("netbox.m.crossplane.io"),
-		ujconfig.WithIncludeList(ExternalNameConfigured()),
+		// The CLI include list defaults to every resource: empty it, so that
+		// all resources are served in-process.
+		ujconfig.WithIncludeList([]string{}),
+		ujconfig.WithTerraformPluginFrameworkIncludeList(ExternalNameConfigured()),
+		ujconfig.WithTerraformPluginFrameworkProvider(FrameworkProvider()),
 		ujconfig.WithFeaturesPackage("internal/features"),
 		ujconfig.WithDefaultResourceOptions(
 			ExternalNameConfigurations(),

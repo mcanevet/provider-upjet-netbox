@@ -14,6 +14,7 @@ import (
 
 	clusterv1beta1 "github.com/mcanevet/provider-upjet-netbox/apis/cluster/v1beta1"
 	namespacedv1beta1 "github.com/mcanevet/provider-upjet-netbox/apis/namespaced/v1beta1"
+	"github.com/mcanevet/provider-upjet-netbox/config"
 )
 
 const (
@@ -28,6 +29,7 @@ const (
 	keyServerURL      = "server_url"
 	keyAPIToken       = "api_token"
 	keyRequestTimeout = "request_timeout"
+	keySkipVersion    = "skip_version_check"
 
 	// defaultRequestTimeout is the NetBox API request timeout, in seconds,
 	// used when the credentials do not set request_timeout. The Terraform
@@ -68,6 +70,9 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 			return ps, err
 		}
 		ps.Configuration = cfg
+		// Served in-process (no-fork): upjet configures this provider with
+		// ps.Configuration on every Connect.
+		ps.FrameworkProvider = config.FrameworkProvider()
 		return ps, nil
 	}
 }
@@ -98,6 +103,10 @@ func providerConfiguration(creds map[string]any) (map[string]any, error) {
 		keyServerURL:      serverURL,
 		keyAPIToken:       apiToken,
 		keyRequestTimeout: timeout,
+		// upjet configures the in-process provider on every reconcile, and the
+		// provider would then query NetBox's version each time; the check only
+		// ever warns.
+		keySkipVersion: true,
 	}, nil
 }
 
