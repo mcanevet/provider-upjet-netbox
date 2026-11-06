@@ -1,0 +1,12 @@
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: Site
+metadata:
+  name: e2e-recreated
+spec:
+  forProvider:
+    name: e2e-recreated
+    slug: e2e-recreated
+    status: active
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default

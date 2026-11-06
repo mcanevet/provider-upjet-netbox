@@ -1,0 +1,51 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/kyverno/chainsaw/v0.2.13/.schemas/json/test-chainsaw-v1alpha1.json
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: recreated
+spec:
+  description: >-
+    A Site deleted directly in NetBox is re-created by the provider, under a
+    new NetBox ID that becomes the MR's external name. Exercises the numeric
+    "id" round trip (terraform state -> external name -> terraform state).
+  steps:
+    - name: the site exists
+      try:
+        - apply:
+            file: site.yaml
+        - assert:
+            file: ../ready.yaml
+
+    - name: deleted in NetBox, re-created with a new ID
+      try:
+        - script:
+            timeout: 6m
+            content: |
+              set -eu
+              k=${KUBECTL:-kubectl}
+              mr="sites.dcim.netbox.m.crossplane.io/e2e-recreated"
+              en() { $k -n "$NAMESPACE" get "$mr" -o jsonpath='{.metadata.annotations.crossplane\.io/external-name}'; }
+
+              old=$(en)
+              case "$old" in ''|*[!0-9]*) echo "external name is not a NetBox ID: '$old'"; exit 1 ;; esac
+              ../netbox-api.sh GET "dcim/sites/$old/" >/dev/null
+              ../netbox-api.sh DELETE "dcim/sites/$old/"
+              if ../netbox-api.sh GET "dcim/sites/$old/" >/dev/null 2>&1; then
+                echo "site $old still in NetBox after DELETE"; exit 1
+              fi
+              echo "deleted site $old in NetBox"
+
+              for i in $(seq 1 60); do
+                # The default poll interval is 10m: an annotation change
+                # triggers a reconcile (DesiredStateChanged predicate).
+                $k -n "$NAMESPACE" annotate --overwrite "$mr" e2e.netbox.crossplane.io/nudge="$i" >/dev/null
+                new=$(en)
+                if [ -n "$new" ] && [ "$new" != "$old" ]; then
+                  ../netbox-api.sh GET "dcim/sites/$new/" | grep -Eq '"name": ?"e2e-recreated"'
+                  echo "external name $old -> $new"; exit 0
+                fi
+                sleep 5
+              done
+              echo "external name still $old"; exit 1
+        - assert:
+            file: ../ready.yaml

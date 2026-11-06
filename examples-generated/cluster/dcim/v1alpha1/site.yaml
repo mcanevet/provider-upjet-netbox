@@ -1,0 +1,41 @@
+apiVersion: dcim.netbox.crossplane.io/v1alpha1
+kind: Site
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/site
+  labels:
+    testing.upbound.io/example-name: with_asn
+  name: with-asn
+spec:
+  forProvider:
+    asnIds:
+    - ${netbox_asn.test.id}
+    description: test-description
+    facility: test-facility
+    groupId: ${netbox_site_group.test.id}
+    latitude: 52.5
+    longitude: 13.4
+    name: test-site
+    physicalAddress: test-physical-address
+    regionId: ${netbox_region.test.id}
+    shippingAddress: test-shipping-address
+    slug: test-site
+    status: active
+    tags:
+    - ${netbox_tag.test.slug}
+    tenantId: ${netbox_tenant.test.id}
+    timezone: Europe/Berlin
+
+---
+
+apiVersion: tenancy.netbox.crossplane.io/v1alpha1
+kind: Tenant
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/site
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    name: test-tenant

@@ -1,6 +1,6 @@
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-  name: upjet-provider-template
+  name: provider-upjet-netbox
 spec:
-  package: xpkg.crossplane.io/crossplane/upjet-provider-template:v0.1.0
+  package: xpkg.crossplane.io/mcanevet/provider-upjet-netbox:v0.1.0

@@ -1,0 +1,48 @@
+apiVersion: virtualization.netbox.m.crossplane.io/v1alpha1
+kind: Cluster
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/cluster
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    clusterGroupId: ${netbox_cluster_group.test.id}
+    clusterTypeId: ${netbox_cluster_type.test.id}
+    description: test-description
+    name: test-cluster
+    siteId: ${netbox_site.test.id}
+    status: active
+    tenantId: ${netbox_tenant.test.id}
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: Site
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/cluster
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    name: test-site
+
+---
+
+apiVersion: tenancy.netbox.m.crossplane.io/v1alpha1
+kind: Tenant
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/cluster
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    name: test-tenant

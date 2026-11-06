@@ -1,0 +1,728 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.20.1
+  name: devices.dcim.netbox.m.crossplane.io
+spec:
+  group: dcim.netbox.m.crossplane.io
+  names:
+    categories:
+    - crossplane
+    - managed
+    - netbox
+    kind: Device
+    listKind: DeviceList
+    plural: devices
+    singular: device
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: 'Device is the Schema for the Devices API. A physical device
+          (dcim.device). primary_ip4_id/primary_ip6_id are set through netbox_primary_ip.
+          From the official documentation https://netboxlabs.com/docs/netbox/models/dcim/device/:
+          Every piece of hardware which is installed within a site or rack exists
+          in NetBox as a device. Devices are measured in rack units (U) and can be
+          half depth or full depth. A device may have a height of 0U: These devices
+          do not consume vertical rack space and cannot be assigned to a particular
+          rack unit. A common example of a 0U device is a vertically-mounted PDU.'
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: DeviceSpec defines the desired state of Device
+            properties:
+              forProvider:
+                properties:
+                  airflow:
+                    description: |-
+                      to-rear, rear-to-front, left-to-right, right-to-left, side-to-rear, passive, mixed, rear-to-side, bottom-to-top, top-to-bottom.
+                      One of: front-to-rear, rear-to-front, left-to-right, right-to-left, side-to-rear, passive, mixed, rear-to-side, bottom-to-top, top-to-bottom.
+                    type: string
+                  assetTag:
+                    description: |-
+                      (String) Unique asset tag.
+                      Unique asset tag.
+                    type: string
+                  clusterId:
+                    description: |-
+                      (Number) Id of the virtualization cluster the device hosts.
+                      Id of the virtualization cluster the device hosts.
+                    type: number
+                  comments:
+                    description: (String)
+                    type: string
+                  configTemplateId:
+                    description: |-
+                      (Number) Id of the config template.
+                      Id of the config template.
+                    type: number
+                  customFields:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      (Map of String) Custom field values by field name. Every value is a string; NetBox coerces numbers and booleans. An object field holds the related object's id, e.g. "12", a multiobject field a JSON list of ids in any order, e.g. jsonencode([12, 13]). A key removed from the map is cleared in NetBox (set {} to clear all).
+                      Custom field values by field name. Every value is a string; NetBox coerces numbers and booleans. An object field holds the related object's id, e.g. "12", a multiobject field a JSON list of ids in any order, e.g. jsonencode([12, 13]). A key removed from the map is cleared in NetBox (set {} to clear all).
+                    type: object
+                    x-kubernetes-map-type: granular
+                  description:
+                    description: (String)
+                    type: string
+                  deviceTypeId:
+                    description: |-
+                      (Number) Id of the device type.
+                      Id of the device type.
+                    type: number
+                  latitude:
+                    description: |-
+                      (Number) GPS coordinate in decimal format (xx.yyyyyy).
+                      GPS coordinate in decimal format (xx.yyyyyy).
+                    type: number
+                  localContextData:
+                    description: |-
+                      (String) Local config context data as JSON text (use jsonencode()).
+                      Local config context data as JSON text (use jsonencode()).
+                    type: string
+                  locationId:
+                    description: |-
+                      (Number) Id of the location within the site.
+                      Id of the location within the site.
+                    type: number
+                  longitude:
+                    description: |-
+                      (Number) GPS coordinate in decimal format (xx.yyyyyy).
+                      GPS coordinate in decimal format (xx.yyyyyy).
+                    type: number
+                  name:
+                    description: |-
+                      (String) Device name; NetBox allows unnamed devices.
+                      Device name; NetBox allows unnamed devices.
+                    type: string
+                  ownerId:
+                    description: |-
+                      (Number) Id of the owner the object is assigned to.
+                      Id of the owner the object is assigned to.
+                    type: number
+                  platformId:
+                    description: |-
+                      (Number) Id of the platform.
+                      Id of the platform.
+                    type: number
+                  rackFace:
+                    description: |-
+                      (String) Rack face the device is mounted on. One of: front, rear.
+                      Rack face the device is mounted on. One of: front, rear.
+                    type: string
+                  rackId:
+                    description: |-
+                      (Number) Id of the rack.
+                      Id of the rack.
+                    type: number
+                  rackPosition:
+                    description: |-
+                      (Number) Lowest rack unit occupied by the device; half units (e.g. 1.5) are allowed.
+                      Lowest rack unit occupied by the device; half units (e.g. 1.5) are allowed.
+                    type: number
+                  roleId:
+                    description: |-
+                      (Number) Id of the device role.
+                      Id of the device role.
+                    type: number
+                  serial:
+                    description: |-
+                      (String) Chassis serial number.
+                      Chassis serial number.
+                    type: string
+                  siteId:
+                    description: |-
+                      (Number) Id of the site.
+                      Id of the site.
+                    type: number
+                  status:
+                    description: |-
+                      (String) Operational status. One of: offline, active, planned, staged, failed, inventory, decommissioning.
+                      Operational status. One of: offline, active, planned, staged, failed, inventory, decommissioning.
+                    type: string
+                  tags:
+                    description: |-
+                      (Set of String) Slugs of the tags assigned to the object (the provider's default_tags are added on top, see tags_all).
+                      Slugs of the tags assigned to the object (the provider's default_tags are added on top, see tags_all).
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  tenantId:
+                    description: |-
+                      (Number) Id of the tenant.
+                      Id of the tenant.
+                    type: number
+                  virtualChassisId:
+                    description: |-
+                      (Number) Id of the virtual chassis.
+                      Id of the virtual chassis.
+                    type: number
+                  virtualChassisPosition:
+                    description: |-
+                      255). Must be a whole number.
+                      Position in the virtual chassis (0-255). Must be a whole number.
+                    type: number
+                  virtualChassisPriority:
+                    description: |-
+                      255). Must be a whole number.
+                      Master election priority in the virtual chassis (0-255). Must be a whole number.
+                    type: number
+                type: object
+              initProvider:
+                description: |-
+                  THIS IS A BETA FIELD. It will be honored
+                  unless the Management Policies feature flag is disabled.
+                  InitProvider holds the same fields as ForProvider, with the exception
+                  of Identifier and other resource reference fields. The fields that are
+                  in InitProvider are merged into ForProvider when the resource is created.
+                  The same fields are also added to the terraform ignore_changes hook, to
+                  avoid updating them after creation. This is useful for fields that are
+                  required on creation, but we do not desire to update them after creation,
+                  for example because of an external controller is managing them, like an
+                  autoscaler.
+                properties:
+                  airflow:
+                    description: |-
+                      to-rear, rear-to-front, left-to-right, right-to-left, side-to-rear, passive, mixed, rear-to-side, bottom-to-top, top-to-bottom.
+                      One of: front-to-rear, rear-to-front, left-to-right, right-to-left, side-to-rear, passive, mixed, rear-to-side, bottom-to-top, top-to-bottom.
+                    type: string
+                  assetTag:
+                    description: |-
+                      (String) Unique asset tag.
+                      Unique asset tag.
+                    type: string
+                  clusterId:
+                    description: |-
+                      (Number) Id of the virtualization cluster the device hosts.
+                      Id of the virtualization cluster the device hosts.
+                    type: number
+                  comments:
+                    description: (String)
+                    type: string
+                  configTemplateId:
+                    description: |-
+                      (Number) Id of the config template.
+                      Id of the config template.
+                    type: number
+                  customFields:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      (Map of String) Custom field values by field name. Every value is a string; NetBox coerces numbers and booleans. An object field holds the related object's id, e.g. "12", a multiobject field a JSON list of ids in any order, e.g. jsonencode([12, 13]). A key removed from the map is cleared in NetBox (set {} to clear all).
+                      Custom field values by field name. Every value is a string; NetBox coerces numbers and booleans. An object field holds the related object's id, e.g. "12", a multiobject field a JSON list of ids in any order, e.g. jsonencode([12, 13]). A key removed from the map is cleared in NetBox (set {} to clear all).
+                    type: object
+                    x-kubernetes-map-type: granular
+                  description:
+                    description: (String)
+                    type: string
+                  deviceTypeId:
+                    description: |-
+                      (Number) Id of the device type.
+                      Id of the device type.
+                    type: number
+                  latitude:
+                    description: |-
+                      (Number) GPS coordinate in decimal format (xx.yyyyyy).
+                      GPS coordinate in decimal format (xx.yyyyyy).
+                    type: number
+                  localContextData:
+                    description: |-
+                      (String) Local config context data as JSON text (use jsonencode()).
+                      Local config context data as JSON text (use jsonencode()).
+                    type: string
+                  locationId:
+                    description: |-
+                      (Number) Id of the location within the site.
+                      Id of the location within the site.
+                    type: number
+                  longitude:
+                    description: |-
+                      (Number) GPS coordinate in decimal format (xx.yyyyyy).
+                      GPS coordinate in decimal format (xx.yyyyyy).
+                    type: number
+                  name:
+                    description: |-
+                      (String) Device name; NetBox allows unnamed devices.
+                      Device name; NetBox allows unnamed devices.
+                    type: string
+                  ownerId:
+                    description: |-
+                      (Number) Id of the owner the object is assigned to.
+                      Id of the owner the object is assigned to.
+                    type: number
+                  platformId:
+                    description: |-
+                      (Number) Id of the platform.
+                      Id of the platform.
+                    type: number
+                  rackFace:
+                    description: |-
+                      (String) Rack face the device is mounted on. One of: front, rear.
+                      Rack face the device is mounted on. One of: front, rear.
+                    type: string
+                  rackId:
+                    description: |-
+                      (Number) Id of the rack.
+                      Id of the rack.
+                    type: number
+                  rackPosition:
+                    description: |-
+                      (Number) Lowest rack unit occupied by the device; half units (e.g. 1.5) are allowed.
+                      Lowest rack unit occupied by the device; half units (e.g. 1.5) are allowed.
+                    type: number
+                  roleId:
+                    description: |-
+                      (Number) Id of the device role.
+                      Id of the device role.
+                    type: number
+                  serial:
+                    description: |-
+                      (String) Chassis serial number.
+                      Chassis serial number.
+                    type: string
+                  siteId:
+                    description: |-
+                      (Number) Id of the site.
+                      Id of the site.
+                    type: number
+                  status:
+                    description: |-
+                      (String) Operational status. One of: offline, active, planned, staged, failed, inventory, decommissioning.
+                      Operational status. One of: offline, active, planned, staged, failed, inventory, decommissioning.
+                    type: string
+                  tags:
+                    description: |-
+                      (Set of String) Slugs of the tags assigned to the object (the provider's default_tags are added on top, see tags_all).
+                      Slugs of the tags assigned to the object (the provider's default_tags are added on top, see tags_all).
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  tenantId:
+                    description: |-
+                      (Number) Id of the tenant.
+                      Id of the tenant.
+                    type: number
+                  virtualChassisId:
+                    description: |-
+                      (Number) Id of the virtual chassis.
+                      Id of the virtual chassis.
+                    type: number
+                  virtualChassisPosition:
+                    description: |-
+                      255). Must be a whole number.
+                      Position in the virtual chassis (0-255). Must be a whole number.
+                    type: number
+                  virtualChassisPriority:
+                    description: |-
+                      255). Must be a whole number.
+                      Master election priority in the virtual chassis (0-255). Must be a whole number.
+                    type: number
+                type: object
+              managementPolicies:
+                default:
+                - '*'
+                description: |-
+                  THIS IS A BETA FIELD. It is on by default but can be opted out
+                  through a Crossplane feature flag.
+                  ManagementPolicies specify the array of actions Crossplane is allowed to
+                  take on the managed and external resources.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                  and this one: https://github.com/crossplane/crossplane/blob/444267e84783136daa93568b364a5f01228cacbe/design/one-pager-ignore-changes.md
+                items:
+                  description: |-
+                    A ManagementAction represents an action that the Crossplane controllers
+                    can take on an external resource.
+                  enum:
+                  - Observe
+                  - Create
+                  - Update
+                  - Delete
+                  - LateInitialize
+                  - '*'
+                  type: string
+                type: array
+              providerConfigRef:
+                default:
+                  kind: ClusterProviderConfig
+                  name: default
+                description: |-
+                  ProviderConfigReference specifies how the provider that will be used to
+                  create, observe, update, and delete this managed resource should be
+                  configured.
+                properties:
+                  kind:
+                    description: Kind of the referenced object.
+                    type: string
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                required:
+                - kind
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: |-
+                  WriteConnectionSecretToReference specifies the namespace and name of a
+                  Secret to which any connection details for this managed resource should
+                  be written. Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                required:
+                - name
+                type: object
+            required:
+            - forProvider
+            type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.deviceTypeId is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.deviceTypeId)
+                || (has(self.initProvider) && has(self.initProvider.deviceTypeId))'
+            - message: spec.forProvider.roleId is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.roleId)
+                || (has(self.initProvider) && has(self.initProvider.roleId))'
+            - message: spec.forProvider.siteId is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.siteId)
+                || (has(self.initProvider) && has(self.initProvider.siteId))'
+          status:
+            description: DeviceStatus defines the observed state of Device.
+            properties:
+              atProvider:
+                properties:
+                  airflow:
+                    description: |-
+                      to-rear, rear-to-front, left-to-right, right-to-left, side-to-rear, passive, mixed, rear-to-side, bottom-to-top, top-to-bottom.
+                      One of: front-to-rear, rear-to-front, left-to-right, right-to-left, side-to-rear, passive, mixed, rear-to-side, bottom-to-top, top-to-bottom.
+                    type: string
+                  assetTag:
+                    description: |-
+                      (String) Unique asset tag.
+                      Unique asset tag.
+                    type: string
+                  clusterId:
+                    description: |-
+                      (Number) Id of the virtualization cluster the device hosts.
+                      Id of the virtualization cluster the device hosts.
+                    type: number
+                  comments:
+                    description: (String)
+                    type: string
+                  configContext:
+                    description: |-
+                      (String) Rendered config context (local_context_data merged with the context assigned through cluster, platform, role, site, tenant and tags) as JSON text, decode with jsondecode().
+                      Rendered config context (local_context_data merged with the context assigned through cluster, platform, role, site, tenant and tags) as JSON text, decode with jsondecode().
+                    type: string
+                  configTemplateId:
+                    description: |-
+                      (Number) Id of the config template.
+                      Id of the config template.
+                    type: number
+                  consolePortCount:
+                    description: |-
+                      (Number) Number of console ports on the device.
+                      Number of console ports on the device.
+                    type: number
+                  consoleServerPortCount:
+                    description: |-
+                      (Number) Number of console server ports on the device.
+                      Number of console server ports on the device.
+                    type: number
+                  created:
+                    description: (String)
+                    type: string
+                  customFields:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      (Map of String) Custom field values by field name. Every value is a string; NetBox coerces numbers and booleans. An object field holds the related object's id, e.g. "12", a multiobject field a JSON list of ids in any order, e.g. jsonencode([12, 13]). A key removed from the map is cleared in NetBox (set {} to clear all).
+                      Custom field values by field name. Every value is a string; NetBox coerces numbers and booleans. An object field holds the related object's id, e.g. "12", a multiobject field a JSON list of ids in any order, e.g. jsonencode([12, 13]). A key removed from the map is cleared in NetBox (set {} to clear all).
+                    type: object
+                    x-kubernetes-map-type: granular
+                  description:
+                    description: (String)
+                    type: string
+                  deviceBayCount:
+                    description: |-
+                      (Number) Number of device bays on the device.
+                      Number of device bays on the device.
+                    type: number
+                  deviceTypeId:
+                    description: |-
+                      (Number) Id of the device type.
+                      Id of the device type.
+                    type: number
+                  frontPortCount:
+                    description: |-
+                      (Number) Number of front ports on the device.
+                      Number of front ports on the device.
+                    type: number
+                  id:
+                    description: (Number) NetBox id.
+                    type: string
+                  interfaceCount:
+                    description: |-
+                      (Number) Number of interfaces on the device.
+                      Number of interfaces on the device.
+                    type: number
+                  inventoryItemCount:
+                    description: |-
+                      (Number) Number of inventory items on the device.
+                      Number of inventory items on the device.
+                    type: number
+                  lastUpdated:
+                    description: (String)
+                    type: string
+                  latitude:
+                    description: |-
+                      (Number) GPS coordinate in decimal format (xx.yyyyyy).
+                      GPS coordinate in decimal format (xx.yyyyyy).
+                    type: number
+                  localContextData:
+                    description: |-
+                      (String) Local config context data as JSON text (use jsonencode()).
+                      Local config context data as JSON text (use jsonencode()).
+                    type: string
+                  locationId:
+                    description: |-
+                      (Number) Id of the location within the site.
+                      Id of the location within the site.
+                    type: number
+                  longitude:
+                    description: |-
+                      (Number) GPS coordinate in decimal format (xx.yyyyyy).
+                      GPS coordinate in decimal format (xx.yyyyyy).
+                    type: number
+                  moduleBayCount:
+                    description: |-
+                      (Number) Number of module bays on the device.
+                      Number of module bays on the device.
+                    type: number
+                  name:
+                    description: |-
+                      (String) Device name; NetBox allows unnamed devices.
+                      Device name; NetBox allows unnamed devices.
+                    type: string
+                  oobIpId:
+                    description: |-
+                      of-band management IP address (managed by netbox_device_oob_ip).
+                      Id of the out-of-band management IP address (managed by netbox_device_oob_ip).
+                    type: number
+                  ownerId:
+                    description: |-
+                      (Number) Id of the owner the object is assigned to.
+                      Id of the owner the object is assigned to.
+                    type: number
+                  platformId:
+                    description: |-
+                      (Number) Id of the platform.
+                      Id of the platform.
+                    type: number
+                  powerOutletCount:
+                    description: |-
+                      (Number) Number of power outlets on the device.
+                      Number of power outlets on the device.
+                    type: number
+                  powerPortCount:
+                    description: |-
+                      (Number) Number of power ports on the device.
+                      Number of power ports on the device.
+                    type: number
+                  primaryIp4Id:
+                    description: |-
+                      (Number) Id of the primary IPv4 address (managed by netbox_primary_ip).
+                      Id of the primary IPv4 address (managed by netbox_primary_ip).
+                    type: number
+                  primaryIp6Id:
+                    description: |-
+                      (Number) Id of the primary IPv6 address (managed by netbox_primary_ip).
+                      Id of the primary IPv6 address (managed by netbox_primary_ip).
+                    type: number
+                  rackFace:
+                    description: |-
+                      (String) Rack face the device is mounted on. One of: front, rear.
+                      Rack face the device is mounted on. One of: front, rear.
+                    type: string
+                  rackId:
+                    description: |-
+                      (Number) Id of the rack.
+                      Id of the rack.
+                    type: number
+                  rackPosition:
+                    description: |-
+                      (Number) Lowest rack unit occupied by the device; half units (e.g. 1.5) are allowed.
+                      Lowest rack unit occupied by the device; half units (e.g. 1.5) are allowed.
+                    type: number
+                  rearPortCount:
+                    description: |-
+                      (Number) Number of rear ports on the device.
+                      Number of rear ports on the device.
+                    type: number
+                  roleId:
+                    description: |-
+                      (Number) Id of the device role.
+                      Id of the device role.
+                    type: number
+                  serial:
+                    description: |-
+                      (String) Chassis serial number.
+                      Chassis serial number.
+                    type: string
+                  siteId:
+                    description: |-
+                      (Number) Id of the site.
+                      Id of the site.
+                    type: number
+                  status:
+                    description: |-
+                      (String) Operational status. One of: offline, active, planned, staged, failed, inventory, decommissioning.
+                      Operational status. One of: offline, active, planned, staged, failed, inventory, decommissioning.
+                    type: string
+                  tags:
+                    description: |-
+                      (Set of String) Slugs of the tags assigned to the object (the provider's default_tags are added on top, see tags_all).
+                      Slugs of the tags assigned to the object (the provider's default_tags are added on top, see tags_all).
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  tagsAll:
+                    description: |-
+                      (Set of String) Slugs of all tags on the object, including the provider's default_tags.
+                      Slugs of all tags on the object, including the provider's default_tags.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  tenantId:
+                    description: |-
+                      (Number) Id of the tenant.
+                      Id of the tenant.
+                    type: number
+                  url:
+                    description: (String)
+                    type: string
+                  virtualChassisId:
+                    description: |-
+                      (Number) Id of the virtual chassis.
+                      Id of the virtual chassis.
+                    type: number
+                  virtualChassisPosition:
+                    description: |-
+                      255). Must be a whole number.
+                      Position in the virtual chassis (0-255). Must be a whole number.
+                    type: number
+                  virtualChassisPriority:
+                    description: |-
+                      255). Must be a whole number.
+                      Master election priority in the virtual chassis (0-255). Must be a whole number.
+                    type: number
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        LastTransitionTime is the last time this condition transitioned from one
+                        status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        A Message containing details about this condition's last transition from
+                        one status to another, if any.
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: |-
+                        Type of this condition. At most one of each condition type may apply to
+                        a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              lastHandledReconcileAt:
+                description: |-
+                  LastHandledReconcileAt holds the value of the most recent
+                  reconcile-requested-at annotation token that the controller has
+                  processed. Users can compare this to the annotation to determine
+                  whether a reconcile request has been handled.
+                type: string
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

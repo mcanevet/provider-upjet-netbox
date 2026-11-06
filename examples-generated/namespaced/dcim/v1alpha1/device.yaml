@@ -1,0 +1,72 @@
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: Device
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    airflow: front-to-rear
+    assetTag: test-asset-tag
+    description: test-description
+    deviceTypeId: ${netbox_device_type.test.id}
+    localContextData: ${jsonencode({ ntp = ["192.0.2.1"] })}
+    locationId: ${netbox_location.test.id}
+    name: test-device
+    platformId: ${netbox_platform.test.id}
+    rackFace: front
+    rackId: ${netbox_rack.test.id}
+    rackPosition: 10
+    roleId: ${netbox_device_role.test.id}
+    serial: test-serial
+    siteId: ${netbox_site.test.id}
+    status: active
+    tenantId: ${netbox_tenant.test.id}
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: DeviceRole
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    name: test-device-role
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: Site
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    name: test-site
+
+---
+
+apiVersion: tenancy.netbox.m.crossplane.io/v1alpha1
+kind: Tenant
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    name: test-tenant

@@ -1,0 +1,63 @@
+apiVersion: ipam.netbox.m.crossplane.io/v1alpha1
+kind: IPAddress
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ipam/v1alpha1/ipaddress
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    deviceInterfaceId: ${netbox_device_interface.test.id}
+    dnsName: test-device.example.com
+    ipAddress: 192.0.2.10/24
+    status: active
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: Device
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ipam/v1alpha1/ipaddress
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    deviceTypeId: ${netbox_device_type.test.id}
+    name: test-device
+    roleId: ${netbox_device_role.test.id}
+    siteId: ${netbox_site.test.id}
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: DeviceRole
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ipam/v1alpha1/ipaddress
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    name: test-device-role
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: Site
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ipam/v1alpha1/ipaddress
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    name: test-site

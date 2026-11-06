@@ -1,0 +1,16 @@
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: DeviceRole
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/devicerole
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    colorHex: "112233"
+    description: test-description
+    name: test-device-role
+    slug: test-device-role
+    vmRole: true

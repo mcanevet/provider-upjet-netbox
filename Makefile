@@ -1,8 +1,8 @@
 # ====================================================================================
 # Setup Project
 
-PROJECT_NAME ?= upjet-provider-template
-PROJECT_REPO ?= github.com/crossplane/$(PROJECT_NAME)
+PROJECT_NAME ?= provider-upjet-netbox
+PROJECT_REPO ?= github.com/mcanevet/$(PROJECT_NAME)
 
 export TERRAFORM_VERSION ?= 1.5.7
 
@@ -10,12 +10,12 @@ export TERRAFORM_VERSION ?= 1.5.7
 # licensed under BSL, which is not permitted.
 TERRAFORM_VERSION_VALID := $(shell [ "$(TERRAFORM_VERSION)" = "`printf "$(TERRAFORM_VERSION)\n1.6" | sort -V | head -n1`" ] && echo 1 || echo 0)
 
-export TERRAFORM_PROVIDER_SOURCE ?= hashicorp/null
-export TERRAFORM_PROVIDER_REPO ?= https://github.com/hashicorp/terraform-provider-null
-export TERRAFORM_PROVIDER_VERSION ?= 3.2.4
-export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-null
-export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= https://releases.hashicorp.com/$(TERRAFORM_PROVIDER_DOWNLOAD_NAME)/$(TERRAFORM_PROVIDER_VERSION)
-export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-null_v3.2.4_x5
+export TERRAFORM_PROVIDER_SOURCE ?= e-breuninger/netbox
+export TERRAFORM_PROVIDER_REPO ?= https://github.com/e-breuninger/terraform-provider-netbox
+export TERRAFORM_PROVIDER_VERSION ?= 6.0.0
+export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-netbox
+export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= https://github.com/e-breuninger/terraform-provider-netbox/releases/download/v$(TERRAFORM_PROVIDER_VERSION)
+export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-netbox_v$(TERRAFORM_PROVIDER_VERSION)
 export TERRAFORM_DOCS_PATH ?= docs/resources
 
 
@@ -65,17 +65,17 @@ CROSSPLANE_VERSION = 2.2.1
 # ====================================================================================
 # Setup Images
 
-REGISTRY_ORGS ?= ghcr.io/crossplane-contrib
+REGISTRY_ORGS ?= ghcr.io/mcanevet
 IMAGES = $(PROJECT_NAME)
 -include build/makelib/imagelight.mk
 
 # ====================================================================================
 # Setup XPKG
 
-XPKG_REG_ORGS ?= ghcr.io/crossplane-contrib
+XPKG_REG_ORGS ?= ghcr.io/mcanevet
 # NOTE(hasheddan): skip promoting on xpkg.crossplane.io as channel tags are
 # inferred.
-XPKG_REG_ORGS_NO_PROMOTE ?= ghcr.io/crossplane-contrib
+XPKG_REG_ORGS_NO_PROMOTE ?= ghcr.io/mcanevet
 XPKGS = $(PROJECT_NAME)
 -include build/makelib/xpkg.mk
 
@@ -95,7 +95,7 @@ fallthrough: submodules
 
 # NOTE(hasheddan): we force image building to happen prior to xpkg build so that
 # we ensure image is present in daemon.
-xpkg.build.upjet-provider-template: do.build.images
+xpkg.build.provider-upjet-netbox: do.build.images
 
 # NOTE(hasheddan): we ensure up is installed prior to running platform-specific
 # build steps in parallel to avoid encountering an installation race condition.
@@ -184,15 +184,8 @@ CROSSPLANE_NAMESPACE = crossplane-system
 # - UPTEST_EXAMPLE_LIST, a comma-separated list of examples to test
 #   To ensure the proper functioning of the end-to-end test resource pre-deletion hook, it is crucial to arrange your resources appropriately.
 #   You can check the basic implementation here: https://github.com/crossplane/uptest/blob/main/internal/templates/03-delete.yaml.tmpl.
-# - UPTEST_CLOUD_CREDENTIALS (optional), multiple sets of AWS IAM User credentials specified as key=value pairs.
-#   The support keys are currently `DEFAULT` and `PEER`. So, an example for the value of this env. variable is:
-#   DEFAULT='[default]
-#   aws_access_key_id = REDACTED
-#   aws_secret_access_key = REDACTED'
-#   PEER='[default]
-#   aws_access_key_id = REDACTED
-#   aws_secret_access_key = REDACTED'
-#   The associated `ProviderConfig`s will be named as `default` and `peer`.
+# - UPTEST_CLOUD_CREDENTIALS, the ProviderConfig secret content: JSON with server_url
+#   and api_token. Defaults to the in-cluster NetBox deployed by netbox.deploy.
 # - UPTEST_DATASOURCE_PATH (optional), please see https://github.com/crossplane/uptest#injecting-dynamic-values-and-datasource
 uptest: $(UPTEST) $(KUBECTL) $(CHAINSAW) $(CROSSPLANE_CLI)
 	@$(INFO) running automated tests
@@ -205,7 +198,37 @@ local-deploy: build controlplane.up local.xpkg.deploy.provider.$(PROJECT_NAME)
 	@$(KUBECTL) -n crossplane-system wait --for=condition=Available deployment --all --timeout=5m
 	@$(OK) running locally built provider
 
-e2e: local-deploy uptest
+# NetBox version the e2e tests run against. Must be within the range the
+# Terraform provider supports (README.md of terraform-provider-netbox v6.0.0:
+# "v4.6.8 - 4.6.10 | v6.0.0 and up"); matches its own acceptance tests.
+NETBOX_VERSION ?= v4.6.10
+
+# Throwaway credentials for the in-cluster NetBox from cluster/test/netbox.yaml.
+# Override UPTEST_CLOUD_CREDENTIALS to run the e2e tests against another NetBox.
+export UPTEST_CLOUD_CREDENTIALS ?= {"server_url":"http://netbox.netbox.svc.cluster.local:8080","api_token":"nbt_mrcLJrER9ves.Iw2JZtpMdYjBuIVIZLItd4lB2RYEiv6xhY23W0tQ"}
+
+# All hand-written examples (excluding ProviderConfigs) by default.
+UPTEST_EXAMPLE_LIST ?= $(shell find examples/cluster examples/namespaced -path '*/v1alpha1/*.yaml' | sort | paste -sd, -)
+
+netbox.deploy: $(KUBECTL)
+	@$(INFO) deploying NetBox $(NETBOX_VERSION) for e2e tests
+	@sed 's|NETBOX_VERSION|$(NETBOX_VERSION)|' cluster/test/netbox.yaml | $(KUBECTL) apply -f -
+	@$(KUBECTL) -n netbox rollout status deployment/postgres deployment/redis --timeout=5m
+	@$(KUBECTL) -n netbox rollout status deployment/netbox --timeout=20m
+	@$(OK) deploying NetBox $(NETBOX_VERSION) for e2e tests
+
+# Chainsaw scenarios of tests/e2e that change NetBox behind the provider's back
+# (uptest only drives the provider). Needs the provider and NetBox deployed
+# (local-deploy netbox.deploy); creates the default ProviderConfigs itself.
+e2e-scenarios: $(KUBECTL) $(CHAINSAW)
+	@$(INFO) running e2e scenarios
+	@KUBECTL=$(KUBECTL) cluster/test/setup.sh
+	@KUBECTL=$(KUBECTL) $(CHAINSAW) test tests/e2e --config tests/e2e/.chainsaw.yaml || $(FAIL)
+	@$(OK) running e2e scenarios
+
+e2e: local-deploy netbox.deploy uptest e2e-scenarios
+
+.PHONY: netbox.deploy e2e-scenarios
 
 crddiff: $(UPTEST)
 	@$(INFO) Checking breaking CRD schema changes

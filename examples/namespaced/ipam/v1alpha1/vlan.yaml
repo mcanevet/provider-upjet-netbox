@@ -1,0 +1,19 @@
+apiVersion: ipam.netbox.m.crossplane.io/v1alpha1
+kind: VLAN
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ipam/v1alpha1/vlan
+    uptest.upbound.io/update-parameter: '{"description":"updated by uptest"}'
+  labels:
+    testing.upbound.io/example-name: e2e
+  name: e2e
+  namespace: default
+spec:
+  forProvider:
+    name: e2e-ns-vlan
+    vid: 3902
+    status: active
+    description: created by uptest
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default

@@ -1,0 +1,18 @@
+apiVersion: ipam.netbox.m.crossplane.io/v1alpha1
+kind: IPAddress
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ipam/v1alpha1/ipaddress
+    uptest.upbound.io/update-parameter: '{"description":"updated by uptest"}'
+  labels:
+    testing.upbound.io/example-name: e2e
+  name: e2e
+  namespace: default
+spec:
+  forProvider:
+    ipAddress: "198.51.100.10/24"
+    status: active
+    description: created by uptest
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default

@@ -1,0 +1,65 @@
+apiVersion: virtualization.netbox.crossplane.io/v1alpha1
+kind: VirtualMachine
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachine
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    clusterId: ${netbox_cluster.test.id}
+    description: test-description
+    diskSizeMb: 10240
+    localContextData: ${jsonencode({ key = "test-value" })}
+    memoryMb: 2048
+    name: test-virtual-machine
+    platformId: ${netbox_platform.test.id}
+    roleId: ${netbox_device_role.test.id}
+    status: active
+    tenantId: ${netbox_tenant.test.id}
+    vcpus: 2
+
+---
+
+apiVersion: virtualization.netbox.crossplane.io/v1alpha1
+kind: Cluster
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachine
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    clusterTypeId: ${netbox_cluster_type.test.id}
+    name: test-cluster
+
+---
+
+apiVersion: dcim.netbox.crossplane.io/v1alpha1
+kind: DeviceRole
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachine
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    name: test-device-role
+    vmRole: true
+
+---
+
+apiVersion: tenancy.netbox.crossplane.io/v1alpha1
+kind: Tenant
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachine
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    name: test-tenant

@@ -9,16 +9,32 @@ import (
 
 	"github.com/crossplane/upjet/v2/pkg/controller"
 
-	resource "github.com/crossplane/upjet-provider-template/internal/controller/namespaced/null/resource"
-	providerconfig "github.com/crossplane/upjet-provider-template/internal/controller/namespaced/providerconfig"
+	device "github.com/mcanevet/provider-upjet-netbox/internal/controller/namespaced/dcim/device"
+	devicerole "github.com/mcanevet/provider-upjet-netbox/internal/controller/namespaced/dcim/devicerole"
+	site "github.com/mcanevet/provider-upjet-netbox/internal/controller/namespaced/dcim/site"
+	ipaddress "github.com/mcanevet/provider-upjet-netbox/internal/controller/namespaced/ipam/ipaddress"
+	prefix "github.com/mcanevet/provider-upjet-netbox/internal/controller/namespaced/ipam/prefix"
+	vlan "github.com/mcanevet/provider-upjet-netbox/internal/controller/namespaced/ipam/vlan"
+	providerconfig "github.com/mcanevet/provider-upjet-netbox/internal/controller/namespaced/providerconfig"
+	tenant "github.com/mcanevet/provider-upjet-netbox/internal/controller/namespaced/tenancy/tenant"
+	cluster "github.com/mcanevet/provider-upjet-netbox/internal/controller/namespaced/virtualization/cluster"
+	virtualmachine "github.com/mcanevet/provider-upjet-netbox/internal/controller/namespaced/virtualization/virtualmachine"
 )
 
 // Setup creates all controllers with the supplied logger and adds them to
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		resource.Setup,
+		device.Setup,
+		devicerole.Setup,
+		site.Setup,
+		ipaddress.Setup,
+		prefix.Setup,
+		vlan.Setup,
 		providerconfig.Setup,
+		tenant.Setup,
+		cluster.Setup,
+		virtualmachine.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err
@@ -31,8 +47,16 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 // the supplied manager gated.
 func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		resource.SetupGated,
+		device.SetupGated,
+		devicerole.SetupGated,
+		site.SetupGated,
+		ipaddress.SetupGated,
+		prefix.SetupGated,
+		vlan.SetupGated,
 		providerconfig.SetupGated,
+		tenant.SetupGated,
+		cluster.SetupGated,
+		virtualmachine.SetupGated,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err
@@ -44,8 +68,16 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 // SetupWebhookWithManager registers conversion webhooks for all resource kinds in the group.
 func SetupWebhookWithManager(mgr ctrl.Manager) error {
 	for _, setup := range []func(ctrl.Manager) error{
-		resource.SetupWebhookWithManager,
+		device.SetupWebhookWithManager,
+		devicerole.SetupWebhookWithManager,
+		site.SetupWebhookWithManager,
+		ipaddress.SetupWebhookWithManager,
+		prefix.SetupWebhookWithManager,
+		vlan.SetupWebhookWithManager,
 		providerconfig.SetupWebhookWithManager,
+		tenant.SetupWebhookWithManager,
+		cluster.SetupWebhookWithManager,
+		virtualmachine.SetupWebhookWithManager,
 	} {
 		if err := setup(mgr); err != nil {
 			return err

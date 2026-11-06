@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/kyverno/chainsaw/v0.2.13/.schemas/json/configuration-chainsaw-v1alpha2.json
+# Configuration for the scenario tests of tests/e2e (make e2e-scenarios).
+apiVersion: chainsaw.kyverno.io/v1alpha2
+kind: Configuration
+metadata:
+  name: e2e-scenarios
+spec:
+  timeouts:
+    # Each reconcile runs terraform plan/apply against NetBox; the first one
+    # after the provider starts also has to run terraform init.
+    assert: 3m
+    error: 3m
+    # Scripts poll NetBox through kubectl exec.
+    exec: 5m
+    # Deleting an MR waits for terraform destroy.
+    cleanup: 3m
+    delete: 3m
+  execution:
+    # The scenarios mutate NetBox directly; keep them sequential so a failure
+    # is attributable to one scenario.
+    parallel: 1

@@ -1,0 +1,13 @@
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: Site
+metadata:
+  name: e2e-drift
+spec:
+  forProvider:
+    name: e2e-drift
+    slug: e2e-drift
+    status: active
+    description: desired by crossplane
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default

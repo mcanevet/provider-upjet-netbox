@@ -1,28 +1,61 @@
 package config
 
 import (
+	"encoding/json"
+	"strconv"
+
 	"github.com/crossplane/upjet/v2/pkg/config"
+	"github.com/pkg/errors"
 )
 
 // ExternalNameConfigs contains all external name configurations for this
-// provider.
+// provider. It doubles as the generation allowlist (see ExternalNameConfigured).
+//
+// All of these are terraform-plugin-framework resources in
+// e-breuninger/netbox v6.0.0 whose "id" is a computed Int64 NetBox object ID
+// and whose ImportState parses req.ID with strconv.ParseInt.
 var ExternalNameConfigs = map[string]config.ExternalName{
-	// Import requires using a randomly generated ID from provider: nl-2e21sda
-	"null_resource": idWithStub(),
+	// dcim
+	"netbox_device":      netboxID(),
+	"netbox_device_role": netboxID(),
+	"netbox_site":        netboxID(),
+	// tenancy
+	"netbox_tenant": netboxID(),
+	// ipam
+	"netbox_ip_address": netboxID(),
+	"netbox_prefix":     netboxID(),
+	"netbox_vlan":       netboxID(),
+	// virtualization
+	"netbox_cluster":         netboxID(),
+	"netbox_virtual_machine": netboxID(),
 }
 
-func idWithStub() config.ExternalName {
+// netboxID is IdentifierFromProvider whose GetExternalNameFn also accepts a
+// numeric "id". upjet's stock config.IDAsExternalName only accepts strings,
+// but the v6 framework resources declare "id" as schema.Int64Attribute, so
+// Terraform writes it to state as a JSON number.
+func netboxID() config.ExternalName {
 	e := config.IdentifierFromProvider
 	e.GetExternalNameFn = func(tfstate map[string]any) (string, error) {
-		en, _ := config.IDAsExternalName(tfstate)
-		return en, nil
+		switch id := tfstate["id"].(type) {
+		case string:
+			if id != "" {
+				return id, nil
+			}
+		case float64:
+			return strconv.FormatInt(int64(id), 10), nil
+		case int64:
+			return strconv.FormatInt(id, 10), nil
+		case json.Number:
+			return id.String(), nil
+		}
+		return "", errors.New("cannot find id in tfstate")
 	}
 	return e
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the
-// table ExternalNameConfigs and sets the version of those resources to v1beta1
-// assuming they will be tested.
+// table ExternalNameConfigs.
 func ExternalNameConfigurations() config.ResourceOption {
 	return func(r *config.Resource) {
 		if e, ok := ExternalNameConfigs[r.Name]; ok {

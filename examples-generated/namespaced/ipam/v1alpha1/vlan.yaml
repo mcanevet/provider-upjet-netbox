@@ -1,0 +1,49 @@
+apiVersion: ipam.netbox.m.crossplane.io/v1alpha1
+kind: VLAN
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ipam/v1alpha1/vlan
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    description: test-description
+    groupId: ${netbox_vlan_group.test.id}
+    name: test-vlan
+    roleId: ${netbox_ipam_role.test.id}
+    siteId: ${netbox_site.test.id}
+    status: active
+    tenantId: ${netbox_tenant.test.id}
+    vid: 100
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: Site
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ipam/v1alpha1/vlan
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    name: test-site
+
+---
+
+apiVersion: tenancy.netbox.m.crossplane.io/v1alpha1
+kind: Tenant
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ipam/v1alpha1/vlan
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    name: test-tenant

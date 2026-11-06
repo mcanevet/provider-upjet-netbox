@@ -1,0 +1,14 @@
+apiVersion: dcim.netbox.crossplane.io/v1alpha1
+kind: DeviceRole
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/devicerole
+    uptest.upbound.io/update-parameter: '{"description":"updated by uptest"}'
+  labels:
+    testing.upbound.io/example-name: e2e
+  name: e2e
+spec:
+  forProvider:
+    name: e2e-cluster-role
+    slug: e2e-cluster-role
+    description: created by uptest

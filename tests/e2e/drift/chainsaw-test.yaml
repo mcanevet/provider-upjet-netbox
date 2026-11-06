@@ -1,0 +1,47 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/kyverno/chainsaw/v0.2.13/.schemas/json/test-chainsaw-v1alpha1.json
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: drift
+spec:
+  description: >-
+    A field of a Site changed directly in NetBox is reverted by the provider to
+    the MR's desired state, under the same NetBox ID (an update, not a
+    re-creation).
+  steps:
+    - name: the site exists
+      try:
+        - apply:
+            file: site.yaml
+        - assert:
+            file: ../ready.yaml
+
+    - name: changed in NetBox, reverted by the provider
+      try:
+        - script:
+            timeout: 6m
+            content: |
+              set -eu
+              k=${KUBECTL:-kubectl}
+              mr="sites.dcim.netbox.m.crossplane.io/e2e-drift"
+              en() { $k -n "$NAMESPACE" get "$mr" -o jsonpath='{.metadata.annotations.crossplane\.io/external-name}'; }
+
+              id=$(en)
+              case "$id" in ''|*[!0-9]*) echo "external name is not a NetBox ID: '$id'"; exit 1 ;; esac
+              ../netbox-api.sh GET "dcim/sites/$id/" | grep -Eq '"description": ?"desired by crossplane"'
+              ../netbox-api.sh PATCH "dcim/sites/$id/" '{"description":"changed out of band"}' >/dev/null
+              ../netbox-api.sh GET "dcim/sites/$id/" | grep -Eq '"description": ?"changed out of band"'
+              echo "changed site $id in NetBox"
+
+              for i in $(seq 1 60); do
+                $k -n "$NAMESPACE" annotate --overwrite "$mr" e2e.netbox.crossplane.io/nudge="$i" >/dev/null
+                if ../netbox-api.sh GET "dcim/sites/$id/" | grep -Eq '"description": ?"desired by crossplane"'; then
+                  now=$(en)
+                  [ "$now" = "$id" ] || { echo "external name changed $id -> $now: re-created, not updated"; exit 1; }
+                  echo "site $id reverted"; exit 0
+                fi
+                sleep 5
+              done
+              echo "site $id not reverted"; exit 1
+        - assert:
+            file: ../ready.yaml

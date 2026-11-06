@@ -1,0 +1,14 @@
+apiVersion: ipam.netbox.crossplane.io/v1alpha1
+kind: IPAddress
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ipam/v1alpha1/ipaddress
+    uptest.upbound.io/update-parameter: '{"description":"updated by uptest"}'
+  labels:
+    testing.upbound.io/example-name: e2e
+  name: e2e
+spec:
+  forProvider:
+    ipAddress: "192.0.2.10/24"
+    status: active
+    description: created by uptest

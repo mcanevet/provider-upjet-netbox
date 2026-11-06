@@ -1,0 +1,14 @@
+apiVersion: tenancy.netbox.crossplane.io/v1alpha1
+kind: Tenant
+metadata:
+  annotations:
+    meta.upbound.io/example-id: tenancy/v1alpha1/tenant
+    uptest.upbound.io/update-parameter: '{"description":"updated by uptest"}'
+  labels:
+    testing.upbound.io/example-name: e2e
+  name: e2e
+spec:
+  forProvider:
+    name: e2e-cluster-tenant
+    slug: e2e-cluster-tenant
+    description: created by uptest
