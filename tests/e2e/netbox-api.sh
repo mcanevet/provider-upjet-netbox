@@ -8,7 +8,10 @@
 #   netbox-api.sh DELETE dcim/sites/12/
 #
 # Exits non-zero on an HTTP error (curl -f), e.g. 404 for a missing object.
-# NETBOX_TOKEN defaults to the throwaway v2 token of cluster/test/netbox.yaml.
+# NETBOX_TOKEN defaults to the throwaway v2 token of cluster/test/netbox.yaml;
+# `make` exports the one matching NETBOX_VERSION. v2 tokens (nbt_ prefix) are
+# sent as "Bearer", v1 tokens (NetBox 4.4 and older) as "Token", like the
+# Terraform provider does.
 set -eu
 
 method=$1
@@ -16,9 +19,13 @@ path=$2
 body=${3:-}
 token=${NETBOX_TOKEN:-nbt_mrcLJrER9ves.Iw2JZtpMdYjBuIVIZLItd4lB2RYEiv6xhY23W0tQ}
 kubectl=${KUBECTL:-kubectl}
+case "$token" in
+  nbt_*) scheme=Bearer ;;
+  *) scheme=Token ;;
+esac
 
 set -- -sS -f -X "$method" \
-  -H "Authorization: Bearer $token" \
+  -H "Authorization: $scheme $token" \
   -H "Accept: application/json" \
   -H "Content-Type: application/json"
 if [ -n "$body" ]; then

@@ -122,9 +122,11 @@ spec:
             - {name: REDIS_HOST, value: redis}
             - {name: SECRET_KEY, value: "0123456789abcdefghij0123456789abcdefghij0123456789"}
             - {name: SUPERUSER_PASSWORD, value: admin}
-            # Together these yield the v2 API token
-            # nbt_mrcLJrER9ves.Iw2JZtpMdYjBuIVIZLItd4lB2RYEiv6xhY23W0tQ
-            # (NetBox creates no token without a pepper).
+            # NetBox 4.5+ (netbox-docker 4.x): together these yield the v2
+            # API token nbt_mrcLJrER9ves.Iw2JZtpMdYjBuIVIZLItd4lB2RYEiv6xhY23W0tQ
+            # (NetBox creates no token without a pepper). NetBox 4.4
+            # (netbox-docker 3.x) creates SUPERUSER_API_TOKEN as a v1 token and
+            # ignores the other two. The Makefile picks the matching token.
             - {name: SUPERUSER_API_TOKEN, value: Iw2JZtpMdYjBuIVIZLItd4lB2RYEiv6xhY23W0tQ}
             - {name: SUPERUSER_API_KEY, value: mrcLJrER9ves}
             - {name: API_TOKEN_PEPPER_1, value: C9Bp3tmBgchWcWc2OkoFuaV9aoKZfhJgZUBG7g0PFxYzf1AkLd}

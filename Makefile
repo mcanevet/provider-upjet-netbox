@@ -198,14 +198,21 @@ local-deploy: build controlplane.up local.xpkg.deploy.provider.$(PROJECT_NAME)
 	@$(KUBECTL) -n crossplane-system wait --for=condition=Available deployment --all --timeout=5m
 	@$(OK) running locally built provider
 
-# NetBox version the e2e tests run against. Must be within the range the
-# Terraform provider supports (README.md of terraform-provider-netbox v6.0.0:
-# "v4.6.8 - 4.6.10 | v6.0.0 and up"); matches its own acceptance tests.
+# NetBox version the e2e tests run against. The Terraform provider v6.0.0
+# supports "v4.6.8 - 4.6.10" (its README.md), which is the default here. CI also
+# runs v4.4.10, outside that range: the provider only warns on an unsupported
+# version (internal/provider/provider_gen.go), so whether it works is what the
+# tests find out.
 NETBOX_VERSION ?= v4.6.10
 
-# Throwaway credentials for the in-cluster NetBox from cluster/test/netbox.yaml.
+# Throwaway API token of the in-cluster NetBox (cluster/test/netbox.yaml).
+# NetBox 4.5+ creates a v2 token (nbt_<key>.<token>, sent as "Bearer"); 4.4
+# only has v1 tokens, so it uses the bare 40-character token ("Token").
+NETBOX_TEST_TOKEN := Iw2JZtpMdYjBuIVIZLItd4lB2RYEiv6xhY23W0tQ
+export NETBOX_TOKEN ?= $(if $(filter v4.4.% v4.3.%,$(NETBOX_VERSION)),$(NETBOX_TEST_TOKEN),nbt_mrcLJrER9ves.$(NETBOX_TEST_TOKEN))
+
 # Override UPTEST_CLOUD_CREDENTIALS to run the e2e tests against another NetBox.
-export UPTEST_CLOUD_CREDENTIALS ?= {"server_url":"http://netbox.netbox.svc.cluster.local:8080","api_token":"nbt_mrcLJrER9ves.Iw2JZtpMdYjBuIVIZLItd4lB2RYEiv6xhY23W0tQ"}
+export UPTEST_CLOUD_CREDENTIALS ?= {"server_url":"http://netbox.netbox.svc.cluster.local:8080","api_token":"$(NETBOX_TOKEN)"}
 
 # All hand-written examples (excluding ProviderConfigs) by default.
 UPTEST_EXAMPLE_LIST ?= $(shell find examples/cluster examples/namespaced -path '*/v1alpha1/*.yaml' | sort | paste -sd, -)
