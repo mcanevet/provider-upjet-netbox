@@ -178,16 +178,17 @@ require (
 )
 
 // e-breuninger/netbox v6 is a terraform-plugin-framework provider whose "id"
-// is an Int64. upjet v2.5.1 needs three unmerged fixes for that, combined on
+// is an Int64. upjet v2.5.1 needs unmerged fixes for that, combined on
 // https://github.com/mcanevet/upjet/tree/netbox-v2.5.1 (v2.5.1 + the PRs'
 // commits, unchanged, + one of ours):
 //   - crossplane/upjet#789 (fixes #785): no synthetic state with an empty id,
 //     which framework providers reject before Create ever runs.
 //   - crossplane/upjet#792 (fixes #788): numeric ids in the Terraform state.
-//   - ff8ceb2 (not upstream yet): the no-fork counterpart of #789, no empty
-//     id in the plugin framework resource config.
-// Drop this replace once all three are released.
-replace github.com/crossplane/upjet/v2 => github.com/mcanevet/upjet/v2 v2.0.0-20261106173001-ff8ceb2b2a64
+//   - two of ours, not upstream yet, for the no-fork (plugin framework) path:
+//     no empty id in the resource config (the counterpart of #789), and
+//     numeric ids normalized after each state conversion (of #792).
+// Drop this replace once all of them are released.
+replace github.com/crossplane/upjet/v2 => github.com/mcanevet/upjet/v2 v2.0.0-20261106181023-a115eb451561
 
 // e-breuninger/netbox v6.0.0 plus one public package re-exporting the provider
 // constructor (internal/provider cannot be imported by other modules), so that
