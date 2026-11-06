@@ -184,8 +184,15 @@ CROSSPLANE_NAMESPACE = crossplane-system
 # - UPTEST_EXAMPLE_LIST, a comma-separated list of examples to test
 #   To ensure the proper functioning of the end-to-end test resource pre-deletion hook, it is crucial to arrange your resources appropriately.
 #   You can check the basic implementation here: https://github.com/crossplane/uptest/blob/main/internal/templates/03-delete.yaml.tmpl.
-# - UPTEST_CLOUD_CREDENTIALS, the ProviderConfig secret content: JSON with server_url
-#   and api_token. Defaults to the in-cluster NetBox deployed by netbox.deploy.
+# - UPTEST_CLOUD_CREDENTIALS (optional), multiple sets of AWS IAM User credentials specified as key=value pairs.
+#   The support keys are currently `DEFAULT` and `PEER`. So, an example for the value of this env. variable is:
+#   DEFAULT='[default]
+#   aws_access_key_id = REDACTED
+#   aws_secret_access_key = REDACTED'
+#   PEER='[default]
+#   aws_access_key_id = REDACTED
+#   aws_secret_access_key = REDACTED'
+#   The associated `ProviderConfig`s will be named as `default` and `peer`.
 # - UPTEST_DATASOURCE_PATH (optional), please see https://github.com/crossplane/uptest#injecting-dynamic-values-and-datasource
 uptest: $(UPTEST) $(KUBECTL) $(CHAINSAW) $(CROSSPLANE_CLI)
 	@$(INFO) running automated tests
@@ -198,44 +205,10 @@ local-deploy: build controlplane.up local.xpkg.deploy.provider.$(PROJECT_NAME)
 	@$(KUBECTL) -n crossplane-system wait --for=condition=Available deployment --all --timeout=5m
 	@$(OK) running locally built provider
 
-# NetBox version the e2e tests run against. The Terraform provider v6.0.0
-# supports "v4.6.8 - 4.6.10" (its README.md), which is the default here. CI also
-# runs v4.4.10, outside that range: the provider only warns on an unsupported
-# version (internal/provider/provider_gen.go), so whether it works is what the
-# tests find out.
-NETBOX_VERSION ?= v4.6.10
+e2e: local-deploy uptest
 
-# Throwaway API token of the in-cluster NetBox (cluster/test/netbox.yaml).
-# NetBox 4.5+ creates a v2 token (nbt_<key>.<token>, sent as "Bearer"); 4.4
-# only has v1 tokens, so it uses the bare 40-character token ("Token").
-NETBOX_TEST_TOKEN := Iw2JZtpMdYjBuIVIZLItd4lB2RYEiv6xhY23W0tQ
-export NETBOX_TOKEN ?= $(if $(filter v4.4.% v4.3.%,$(NETBOX_VERSION)),$(NETBOX_TEST_TOKEN),nbt_mrcLJrER9ves.$(NETBOX_TEST_TOKEN))
-
-# Override UPTEST_CLOUD_CREDENTIALS to run the e2e tests against another NetBox.
-export UPTEST_CLOUD_CREDENTIALS ?= {"server_url":"http://netbox.netbox.svc.cluster.local:8080","api_token":"$(NETBOX_TOKEN)"}
-
-# All hand-written examples (excluding ProviderConfigs) by default.
-UPTEST_EXAMPLE_LIST ?= $(shell find examples/cluster examples/namespaced -path '*/v1alpha1/*.yaml' | sort | paste -sd, -)
-
-netbox.deploy: $(KUBECTL)
-	@$(INFO) deploying NetBox $(NETBOX_VERSION) for e2e tests
-	@sed 's|NETBOX_VERSION|$(NETBOX_VERSION)|' cluster/test/netbox.yaml | $(KUBECTL) apply -f -
-	@$(KUBECTL) -n netbox rollout status deployment/postgres deployment/redis --timeout=5m
-	@$(KUBECTL) -n netbox rollout status deployment/netbox --timeout=20m
-	@$(OK) deploying NetBox $(NETBOX_VERSION) for e2e tests
-
-# Chainsaw scenarios of tests/e2e that change NetBox behind the provider's back
-# (uptest only drives the provider). Needs the provider and NetBox deployed
-# (local-deploy netbox.deploy); creates the default ProviderConfigs itself.
-e2e-scenarios: $(KUBECTL) $(CHAINSAW)
-	@$(INFO) running e2e scenarios
-	@KUBECTL=$(KUBECTL) cluster/test/setup.sh
-	@KUBECTL=$(KUBECTL) $(CHAINSAW) test tests/e2e --config tests/e2e/.chainsaw.yaml || $(FAIL)
-	@$(OK) running e2e scenarios
-
-e2e: local-deploy netbox.deploy uptest e2e-scenarios
-
-.PHONY: netbox.deploy e2e-scenarios
+# NetBox e2e additions (in-cluster NetBox, credentials, Chainsaw scenarios).
+-include e2e.mk
 
 crddiff: $(UPTEST)
 	@$(INFO) Checking breaking CRD schema changes
