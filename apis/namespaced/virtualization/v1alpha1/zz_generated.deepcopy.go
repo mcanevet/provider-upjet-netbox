@@ -9,6 +9,7 @@
 package v1alpha1
 
 import (
+	"github.com/crossplane/crossplane/apis/v2/core/v2"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -599,6 +600,16 @@ func (in *VirtualMachineInitParameters) DeepCopyInto(out *VirtualMachineInitPara
 		*out = new(float64)
 		**out = **in
 	}
+	if in.SiteIDRef != nil {
+		in, out := &in.SiteIDRef, &out.SiteIDRef
+		*out = new(v2.NamespacedReference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.SiteIDSelector != nil {
+		in, out := &in.SiteIDSelector, &out.SiteIDSelector
+		*out = new(v2.NamespacedSelector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.StartOnBoot != nil {
 		in, out := &in.StartOnBoot, &out.StartOnBoot
 		*out = new(string)
@@ -960,6 +971,16 @@ func (in *VirtualMachineParameters) DeepCopyInto(out *VirtualMachineParameters) 
 		in, out := &in.SiteID, &out.SiteID
 		*out = new(float64)
 		**out = **in
+	}
+	if in.SiteIDRef != nil {
+		in, out := &in.SiteIDRef, &out.SiteIDRef
+		*out = new(v2.NamespacedReference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.SiteIDSelector != nil {
+		in, out := &in.SiteIDSelector, &out.SiteIDSelector
+		*out = new(v2.NamespacedSelector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.StartOnBoot != nil {
 		in, out := &in.StartOnBoot, &out.StartOnBoot

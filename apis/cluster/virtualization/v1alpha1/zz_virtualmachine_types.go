@@ -71,7 +71,16 @@ type VirtualMachineInitParameters struct {
 
 	// (Number) Id of the site (a virtual machine needs a cluster or a site).
 	// Id of the site (a virtual machine needs a cluster or a site).
+	// +crossplane:generate:reference:type=github.com/mcanevet/provider-upjet-netbox/apis/cluster/dcim/v1alpha1.Site
 	SiteID *float64 `json:"siteId,omitempty" tf:"site_id,omitempty"`
+
+	// Reference to a Site in dcim to populate siteId.
+	// +kubebuilder:validation:Optional
+	SiteIDRef *v2.Reference `json:"siteIdRef,omitempty" tf:"-"`
+
+	// Selector for a Site in dcim to populate siteId.
+	// +kubebuilder:validation:Optional
+	SiteIDSelector *v2.Selector `json:"siteIdSelector,omitempty" tf:"-"`
 
 	// (String) Power state the virtual machine takes when its host boots. One of: on, off, laststate.
 	// Power state the virtual machine takes when its host boots. One of: on, off, laststate.
@@ -294,8 +303,17 @@ type VirtualMachineParameters struct {
 
 	// (Number) Id of the site (a virtual machine needs a cluster or a site).
 	// Id of the site (a virtual machine needs a cluster or a site).
+	// +crossplane:generate:reference:type=github.com/mcanevet/provider-upjet-netbox/apis/cluster/dcim/v1alpha1.Site
 	// +kubebuilder:validation:Optional
 	SiteID *float64 `json:"siteId,omitempty" tf:"site_id,omitempty"`
+
+	// Reference to a Site in dcim to populate siteId.
+	// +kubebuilder:validation:Optional
+	SiteIDRef *v2.Reference `json:"siteIdRef,omitempty" tf:"-"`
+
+	// Selector for a Site in dcim to populate siteId.
+	// +kubebuilder:validation:Optional
+	SiteIDSelector *v2.Selector `json:"siteIdSelector,omitempty" tf:"-"`
 
 	// (String) Power state the virtual machine takes when its host boots. One of: on, off, laststate.
 	// Power state the virtual machine takes when its host boots. One of: on, off, laststate.

@@ -1,0 +1,40 @@
+apiVersion: virtualization.netbox.m.crossplane.io/v1alpha1
+kind: VirtualMachine
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachine
+  labels:
+    testing.upbound.io/example-name: e2e
+  name: e2e
+  namespace: default
+spec:
+  forProvider:
+    name: e2e-ns-vm
+    status: active
+    description: created by uptest
+    # NetBox requires a virtual machine to be assigned to a site and/or cluster.
+    siteIdRef:
+      name: e2e-vm
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: Site
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachine
+  labels:
+    testing.upbound.io/example-name: e2e-vm
+  name: e2e-vm
+  namespace: default
+spec:
+  forProvider:
+    name: e2e-ns-vm-site
+    slug: e2e-ns-vm-site
+    status: active
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default
