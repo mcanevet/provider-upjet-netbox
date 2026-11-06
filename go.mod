@@ -160,7 +160,12 @@ require (
 	sigs.k8s.io/yaml v1.6.0 // indirect
 )
 
-// Numeric Terraform state ids (e-breuninger/netbox v6 declares "id" as Int64)
-// fail every reconcile after the first in upjet v2.5.1. Remove once
-// https://github.com/crossplane/upjet/pull/792 (fixes #788) is released.
-replace github.com/crossplane/upjet/v2 => github.com/Lumexralph/upjet/v2 v2.5.1-0.20261021144045-ce7a43425071
+// e-breuninger/netbox v6 is a terraform-plugin-framework provider whose "id"
+// is an Int64. upjet v2.5.1 needs two unmerged fixes for that, combined on
+// https://github.com/mcanevet/upjet/tree/netbox-v2.5.1 (v2.5.1 + the PRs'
+// commits, unchanged):
+//   - crossplane/upjet#789 (fixes #785): no synthetic state with an empty id,
+//     which framework providers reject before Create ever runs.
+//   - crossplane/upjet#792 (fixes #788): numeric ids in the Terraform state.
+// Drop this replace once both are released.
+replace github.com/crossplane/upjet/v2 => github.com/mcanevet/upjet/v2 v2.0.0-20261106094046-c6daed9e5142
