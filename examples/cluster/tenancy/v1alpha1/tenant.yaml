@@ -3,7 +3,6 @@ kind: Tenant
 metadata:
   annotations:
     meta.upbound.io/example-id: tenancy/v1alpha1/tenant
-    uptest.upbound.io/update-parameter: '{"description":"updated by uptest"}'
   labels:
     testing.upbound.io/example-name: e2e
   name: e2e

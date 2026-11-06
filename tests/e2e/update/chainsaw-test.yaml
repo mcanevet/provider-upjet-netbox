@@ -1,0 +1,55 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/kyverno/chainsaw/v0.2.13/.schemas/json/test-chainsaw-v1alpha1.json
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: update
+spec:
+  description: >-
+    A field changed in the MR's spec is applied to NetBox in place, under the
+    same NetBox ID (an update, not a re-creation). Replaces uptest's update
+    step, which cannot run with several examples in one uptest run.
+  steps:
+    - name: the site exists
+      try:
+        - apply:
+            file: site.yaml
+        - assert:
+            file: ../ready.yaml
+
+    - name: spec changed, NetBox updated in place
+      try:
+        - script:
+            timeout: 6m
+            content: |
+              set -eu
+              k=${KUBECTL:-kubectl}
+              mr="sites.dcim.netbox.m.crossplane.io/e2e-update"
+              en() { $k -n "$NAMESPACE" get "$mr" -o jsonpath='{.metadata.annotations.crossplane\.io/external-name}'; }
+
+              id=$(en)
+              case "$id" in ''|*[!0-9]*) echo "external name is not a NetBox ID: '$id'"; exit 1 ;; esac
+              ../netbox-api.sh GET "dcim/sites/$id/" | grep -Eq '"description": ?"before update"'
+
+              # A spec change bumps the generation, which triggers a reconcile.
+              $k -n "$NAMESPACE" patch "$mr" --type=merge -p '{"spec":{"forProvider":{"description":"after update"}}}'
+
+              for i in $(seq 1 60); do
+                if ../netbox-api.sh GET "dcim/sites/$id/" | grep -Eq '"description": ?"after update"'; then
+                  now=$(en)
+                  [ "$now" = "$id" ] || { echo "external name changed $id -> $now: re-created, not updated"; exit 1; }
+                  echo "site $id updated in place"; exit 0
+                fi
+                sleep 5
+              done
+              echo "site $id not updated"; exit 1
+        - assert:
+            file: ../ready.yaml
+        - assert:
+            resource:
+              apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+              kind: Site
+              metadata:
+                name: e2e-update
+              status:
+                atProvider:
+                  description: after update

@@ -1,0 +1,13 @@
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: Site
+metadata:
+  name: e2e-update
+spec:
+  forProvider:
+    name: e2e-update
+    slug: e2e-update
+    status: active
+    description: before update
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default

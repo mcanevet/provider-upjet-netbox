@@ -3,7 +3,6 @@ kind: Site
 metadata:
   annotations:
     meta.upbound.io/example-id: dcim/v1alpha1/site
-    uptest.upbound.io/update-parameter: '{"description":"updated by uptest"}'
   labels:
     testing.upbound.io/example-name: e2e
   name: e2e
