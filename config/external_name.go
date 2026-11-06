@@ -1,11 +1,7 @@
 package config
 
 import (
-	"encoding/json"
-	"strconv"
-
 	"github.com/crossplane/upjet/v2/pkg/config"
-	"github.com/pkg/errors"
 )
 
 // ExternalNameConfigs contains all external name configurations for this
@@ -13,45 +9,23 @@ import (
 //
 // All of these are terraform-plugin-framework resources in
 // e-breuninger/netbox v6.0.0 whose "id" is a computed Int64 NetBox object ID
-// and whose ImportState parses req.ID with strconv.ParseInt.
+// and whose ImportState parses req.ID with strconv.ParseInt. Terraform writes
+// that id to state as a JSON number, which upjet only accepts with
+// crossplane/upjet#792 (see the replace directive in go.mod).
 var ExternalNameConfigs = map[string]config.ExternalName{
 	// dcim
-	"netbox_device":      netboxID(),
-	"netbox_device_role": netboxID(),
-	"netbox_site":        netboxID(),
+	"netbox_device":      config.IdentifierFromProvider,
+	"netbox_device_role": config.IdentifierFromProvider,
+	"netbox_site":        config.IdentifierFromProvider,
 	// tenancy
-	"netbox_tenant": netboxID(),
+	"netbox_tenant": config.IdentifierFromProvider,
 	// ipam
-	"netbox_ip_address": netboxID(),
-	"netbox_prefix":     netboxID(),
-	"netbox_vlan":       netboxID(),
+	"netbox_ip_address": config.IdentifierFromProvider,
+	"netbox_prefix":     config.IdentifierFromProvider,
+	"netbox_vlan":       config.IdentifierFromProvider,
 	// virtualization
-	"netbox_cluster":         netboxID(),
-	"netbox_virtual_machine": netboxID(),
-}
-
-// netboxID is IdentifierFromProvider whose GetExternalNameFn also accepts a
-// numeric "id". upjet's stock config.IDAsExternalName only accepts strings,
-// but the v6 framework resources declare "id" as schema.Int64Attribute, so
-// Terraform writes it to state as a JSON number.
-func netboxID() config.ExternalName {
-	e := config.IdentifierFromProvider
-	e.GetExternalNameFn = func(tfstate map[string]any) (string, error) {
-		switch id := tfstate["id"].(type) {
-		case string:
-			if id != "" {
-				return id, nil
-			}
-		case float64:
-			return strconv.FormatInt(int64(id), 10), nil
-		case int64:
-			return strconv.FormatInt(id, 10), nil
-		case json.Number:
-			return id.String(), nil
-		}
-		return "", errors.New("cannot find id in tfstate")
-	}
-	return e
+	"netbox_cluster":         config.IdentifierFromProvider,
+	"netbox_virtual_machine": config.IdentifierFromProvider,
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the
