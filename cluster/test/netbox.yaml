@@ -6,6 +6,11 @@
 # upstream file); nothing here is a secret.
 #
 # The NetBox image tag is substituted by `make netbox.deploy` (NETBOX_VERSION).
+#
+# Every pod sets enableServiceLinks: false. Otherwise Kubernetes injects
+# Docker-link-style variables for each Service in the namespace, e.g.
+# REDIS_PORT=tcp://10.96.x.y:6379 for the "redis" Service, and the NetBox
+# image reads REDIS_PORT as its own setting and crashes on int("tcp://...").
 ---
 apiVersion: v1
 kind: Namespace
@@ -25,6 +30,7 @@ spec:
     metadata:
       labels: {app: postgres}
     spec:
+      enableServiceLinks: false
       containers:
         - name: postgres
           image: postgres:18-alpine
@@ -67,6 +73,7 @@ spec:
     metadata:
       labels: {app: redis}
     spec:
+      enableServiceLinks: false
       containers:
         - name: valkey
           image: docker.io/valkey/valkey:9.0-alpine
@@ -104,6 +111,7 @@ spec:
     metadata:
       labels: {app: netbox}
     spec:
+      enableServiceLinks: false
       containers:
         - name: netbox
           image: netboxcommunity/netbox:NETBOX_VERSION
