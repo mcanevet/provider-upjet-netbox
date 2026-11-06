@@ -9,12 +9,28 @@ metadata:
 spec:
   forProvider:
     clusterGroupId: ${netbox_cluster_group.test.id}
-    clusterTypeId: ${netbox_cluster_type.test.id}
+    clusterTypeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
     description: test-description
     name: test-cluster
     siteId: ${netbox_site.test.id}
     status: active
     tenantId: ${netbox_tenant.test.id}
+
+---
+
+apiVersion: virtualization.netbox.crossplane.io/v1alpha1
+kind: ClusterType
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/cluster
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    name: test-cluster-type
 
 ---
 

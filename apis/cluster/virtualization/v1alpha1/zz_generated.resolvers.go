@@ -14,6 +14,50 @@ import (
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+// ResolveReferences of this Cluster.
+func (mg *Cluster) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPIResolver(c, mg)
+
+	var rsp reference.ResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromFloatPtrValue(mg.Spec.ForProvider.ClusterTypeID),
+		Extract:      reference.ExternalName(),
+		Namespace:    mg.GetNamespace(),
+		Reference:    mg.Spec.ForProvider.ClusterTypeIDRef,
+		Selector:     mg.Spec.ForProvider.ClusterTypeIDSelector,
+		To: reference.To{
+			List:    &ClusterTypeList{},
+			Managed: &ClusterType{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.ClusterTypeID")
+	}
+	mg.Spec.ForProvider.ClusterTypeID = reference.ToFloatPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.ClusterTypeIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromFloatPtrValue(mg.Spec.InitProvider.ClusterTypeID),
+		Extract:      reference.ExternalName(),
+		Namespace:    mg.GetNamespace(),
+		Reference:    mg.Spec.InitProvider.ClusterTypeIDRef,
+		Selector:     mg.Spec.InitProvider.ClusterTypeIDSelector,
+		To: reference.To{
+			List:    &ClusterTypeList{},
+			Managed: &ClusterType{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.ClusterTypeID")
+	}
+	mg.Spec.InitProvider.ClusterTypeID = reference.ToFloatPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.ClusterTypeIDRef = rsp.ResolvedReference
+
+	return nil
+}
+
 // ResolveReferences of this VirtualMachine.
 func (mg *VirtualMachine) ResolveReferences(ctx context.Context, c client.Reader) error {
 	r := reference.NewAPIResolver(c, mg)

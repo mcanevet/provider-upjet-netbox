@@ -27,10 +27,16 @@ metadata:
   namespace: crossplane-system
 spec:
   forProvider:
-    deviceTypeId: ${netbox_device_type.test.id}
+    deviceTypeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
     name: test-device
-    roleId: ${netbox_device_role.test.id}
-    siteId: ${netbox_site.test.id}
+    roleIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
+    siteIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
 
 ---
 
@@ -46,6 +52,39 @@ metadata:
 spec:
   forProvider:
     name: test-device-role
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: DeviceType
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ipam/v1alpha1/ipaddress
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    manufacturerIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
+    model: test-device-type
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: Manufacturer
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ipam/v1alpha1/ipaddress
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    name: test-manufacturer
 
 ---
 

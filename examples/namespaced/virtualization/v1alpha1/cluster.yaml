@@ -1,0 +1,38 @@
+apiVersion: virtualization.netbox.m.crossplane.io/v1alpha1
+kind: Cluster
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/cluster
+  labels:
+    testing.upbound.io/example-name: e2e
+  name: e2e
+  namespace: default
+spec:
+  forProvider:
+    name: e2e-ns-cluster
+    status: active
+    description: created by uptest
+    clusterTypeIdRef:
+      name: e2e-cluster
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default
+
+---
+
+apiVersion: virtualization.netbox.m.crossplane.io/v1alpha1
+kind: ClusterType
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/cluster
+  labels:
+    testing.upbound.io/example-name: e2e-cluster
+  name: e2e-cluster
+  namespace: default
+spec:
+  forProvider:
+    name: e2e-ns-cluster-type
+    slug: e2e-ns-cluster-type
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default

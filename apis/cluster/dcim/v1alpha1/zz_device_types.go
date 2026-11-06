@@ -44,7 +44,16 @@ type DeviceInitParameters struct {
 
 	// (Number) Id of the device type.
 	// Id of the device type.
+	// +crossplane:generate:reference:type=github.com/mcanevet/provider-upjet-netbox/apis/cluster/dcim/v1alpha1.DeviceType
 	DeviceTypeID *float64 `json:"deviceTypeId,omitempty" tf:"device_type_id,omitempty"`
+
+	// Reference to a DeviceType in dcim to populate deviceTypeId.
+	// +kubebuilder:validation:Optional
+	DeviceTypeIDRef *v2.Reference `json:"deviceTypeIdRef,omitempty" tf:"-"`
+
+	// Selector for a DeviceType in dcim to populate deviceTypeId.
+	// +kubebuilder:validation:Optional
+	DeviceTypeIDSelector *v2.Selector `json:"deviceTypeIdSelector,omitempty" tf:"-"`
 
 	// (Number) GPS coordinate in decimal format (xx.yyyyyy).
 	// GPS coordinate in decimal format (xx.yyyyyy).
@@ -88,7 +97,16 @@ type DeviceInitParameters struct {
 
 	// (Number) Id of the device role.
 	// Id of the device role.
+	// +crossplane:generate:reference:type=github.com/mcanevet/provider-upjet-netbox/apis/cluster/dcim/v1alpha1.DeviceRole
 	RoleID *float64 `json:"roleId,omitempty" tf:"role_id,omitempty"`
+
+	// Reference to a DeviceRole in dcim to populate roleId.
+	// +kubebuilder:validation:Optional
+	RoleIDRef *v2.Reference `json:"roleIdRef,omitempty" tf:"-"`
+
+	// Selector for a DeviceRole in dcim to populate roleId.
+	// +kubebuilder:validation:Optional
+	RoleIDSelector *v2.Selector `json:"roleIdSelector,omitempty" tf:"-"`
 
 	// (String) Chassis serial number.
 	// Chassis serial number.
@@ -96,7 +114,16 @@ type DeviceInitParameters struct {
 
 	// (Number) Id of the site.
 	// Id of the site.
+	// +crossplane:generate:reference:type=github.com/mcanevet/provider-upjet-netbox/apis/cluster/dcim/v1alpha1.Site
 	SiteID *float64 `json:"siteId,omitempty" tf:"site_id,omitempty"`
+
+	// Reference to a Site in dcim to populate siteId.
+	// +kubebuilder:validation:Optional
+	SiteIDRef *v2.Reference `json:"siteIdRef,omitempty" tf:"-"`
+
+	// Selector for a Site in dcim to populate siteId.
+	// +kubebuilder:validation:Optional
+	SiteIDSelector *v2.Selector `json:"siteIdSelector,omitempty" tf:"-"`
 
 	// (String) Operational status. One of: offline, active, planned, staged, failed, inventory, decommissioning.
 	// Operational status. One of: offline, active, planned, staged, failed, inventory, decommissioning.
@@ -346,8 +373,17 @@ type DeviceParameters struct {
 
 	// (Number) Id of the device type.
 	// Id of the device type.
+	// +crossplane:generate:reference:type=github.com/mcanevet/provider-upjet-netbox/apis/cluster/dcim/v1alpha1.DeviceType
 	// +kubebuilder:validation:Optional
 	DeviceTypeID *float64 `json:"deviceTypeId,omitempty" tf:"device_type_id,omitempty"`
+
+	// Reference to a DeviceType in dcim to populate deviceTypeId.
+	// +kubebuilder:validation:Optional
+	DeviceTypeIDRef *v2.Reference `json:"deviceTypeIdRef,omitempty" tf:"-"`
+
+	// Selector for a DeviceType in dcim to populate deviceTypeId.
+	// +kubebuilder:validation:Optional
+	DeviceTypeIDSelector *v2.Selector `json:"deviceTypeIdSelector,omitempty" tf:"-"`
 
 	// (Number) GPS coordinate in decimal format (xx.yyyyyy).
 	// GPS coordinate in decimal format (xx.yyyyyy).
@@ -401,8 +437,17 @@ type DeviceParameters struct {
 
 	// (Number) Id of the device role.
 	// Id of the device role.
+	// +crossplane:generate:reference:type=github.com/mcanevet/provider-upjet-netbox/apis/cluster/dcim/v1alpha1.DeviceRole
 	// +kubebuilder:validation:Optional
 	RoleID *float64 `json:"roleId,omitempty" tf:"role_id,omitempty"`
+
+	// Reference to a DeviceRole in dcim to populate roleId.
+	// +kubebuilder:validation:Optional
+	RoleIDRef *v2.Reference `json:"roleIdRef,omitempty" tf:"-"`
+
+	// Selector for a DeviceRole in dcim to populate roleId.
+	// +kubebuilder:validation:Optional
+	RoleIDSelector *v2.Selector `json:"roleIdSelector,omitempty" tf:"-"`
 
 	// (String) Chassis serial number.
 	// Chassis serial number.
@@ -411,8 +456,17 @@ type DeviceParameters struct {
 
 	// (Number) Id of the site.
 	// Id of the site.
+	// +crossplane:generate:reference:type=github.com/mcanevet/provider-upjet-netbox/apis/cluster/dcim/v1alpha1.Site
 	// +kubebuilder:validation:Optional
 	SiteID *float64 `json:"siteId,omitempty" tf:"site_id,omitempty"`
+
+	// Reference to a Site in dcim to populate siteId.
+	// +kubebuilder:validation:Optional
+	SiteIDRef *v2.Reference `json:"siteIdRef,omitempty" tf:"-"`
+
+	// Selector for a Site in dcim to populate siteId.
+	// +kubebuilder:validation:Optional
+	SiteIDSelector *v2.Selector `json:"siteIdSelector,omitempty" tf:"-"`
 
 	// (String) Operational status. One of: offline, active, planned, staged, failed, inventory, decommissioning.
 	// Operational status. One of: offline, active, planned, staged, failed, inventory, decommissioning.
@@ -482,11 +536,8 @@ type DeviceStatus struct {
 type Device struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.deviceTypeId) || (has(self.initProvider) && has(self.initProvider.deviceTypeId))",message="spec.forProvider.deviceTypeId is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.roleId) || (has(self.initProvider) && has(self.initProvider.roleId))",message="spec.forProvider.roleId is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.siteId) || (has(self.initProvider) && has(self.initProvider.siteId))",message="spec.forProvider.siteId is a required parameter"
-	Spec   DeviceSpec   `json:"spec"`
-	Status DeviceStatus `json:"status,omitempty"`
+	Spec              DeviceSpec   `json:"spec"`
+	Status            DeviceStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

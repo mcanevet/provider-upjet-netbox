@@ -13,4 +13,10 @@ func (tr *Device) Hub() {}
 func (tr *DeviceRole) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *DeviceType) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *Manufacturer) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *Site) Hub() {}

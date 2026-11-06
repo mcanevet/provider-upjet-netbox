@@ -1,0 +1,103 @@
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: Device
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: e2e
+  name: e2e
+  namespace: default
+spec:
+  forProvider:
+    name: e2e-ns-device
+    status: active
+    description: created by uptest
+    # NetBox requires a device type, a role and a site.
+    deviceTypeIdRef:
+      name: e2e-device
+    roleIdRef:
+      name: e2e-device
+    siteIdRef:
+      name: e2e-device
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: DeviceType
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: e2e-device
+  name: e2e-device
+  namespace: default
+spec:
+  forProvider:
+    model: e2e-ns-model
+    slug: e2e-ns-model
+    manufacturerIdRef:
+      name: e2e-device
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: Manufacturer
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: e2e-device
+  name: e2e-device
+  namespace: default
+spec:
+  forProvider:
+    name: e2e-ns-manufacturer
+    slug: e2e-ns-manufacturer
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: DeviceRole
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: e2e-device
+  name: e2e-device
+  namespace: default
+spec:
+  forProvider:
+    name: e2e-ns-device-role
+    slug: e2e-ns-device-role
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: Site
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: e2e-device
+  name: e2e-device
+  namespace: default
+spec:
+  forProvider:
+    name: e2e-ns-device-site
+    slug: e2e-ns-device-site
+    status: active
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default

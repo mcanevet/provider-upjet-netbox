@@ -11,6 +11,8 @@ import (
 
 	device "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/device"
 	devicerole "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/devicerole"
+	devicetype "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/devicetype"
+	manufacturer "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/manufacturer"
 	site "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/site"
 	ipaddress "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/ipam/ipaddress"
 	prefix "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/ipam/prefix"
@@ -18,6 +20,7 @@ import (
 	providerconfig "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/providerconfig"
 	tenant "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/tenancy/tenant"
 	cluster "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/virtualization/cluster"
+	clustertype "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/virtualization/clustertype"
 	virtualmachine "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/virtualization/virtualmachine"
 )
 
@@ -27,6 +30,8 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		device.Setup,
 		devicerole.Setup,
+		devicetype.Setup,
+		manufacturer.Setup,
 		site.Setup,
 		ipaddress.Setup,
 		prefix.Setup,
@@ -34,6 +39,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		providerconfig.Setup,
 		tenant.Setup,
 		cluster.Setup,
+		clustertype.Setup,
 		virtualmachine.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
@@ -49,6 +55,8 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		device.SetupGated,
 		devicerole.SetupGated,
+		devicetype.SetupGated,
+		manufacturer.SetupGated,
 		site.SetupGated,
 		ipaddress.SetupGated,
 		prefix.SetupGated,
@@ -56,6 +64,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		providerconfig.SetupGated,
 		tenant.SetupGated,
 		cluster.SetupGated,
+		clustertype.SetupGated,
 		virtualmachine.SetupGated,
 	} {
 		if err := setup(mgr, o); err != nil {
@@ -70,6 +79,8 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 	for _, setup := range []func(ctrl.Manager) error{
 		device.SetupWebhookWithManager,
 		devicerole.SetupWebhookWithManager,
+		devicetype.SetupWebhookWithManager,
+		manufacturer.SetupWebhookWithManager,
 		site.SetupWebhookWithManager,
 		ipaddress.SetupWebhookWithManager,
 		prefix.SetupWebhookWithManager,
@@ -77,6 +88,7 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		providerconfig.SetupWebhookWithManager,
 		tenant.SetupWebhookWithManager,
 		cluster.SetupWebhookWithManager,
+		clustertype.SetupWebhookWithManager,
 		virtualmachine.SetupWebhookWithManager,
 	} {
 		if err := setup(mgr); err != nil {

@@ -9,6 +9,18 @@ import (
 // adds <field>Ref and <field>Selector fields to the CRD, resolved to the
 // referenced resource's external name (its NetBox ID).
 var references = map[string]map[string]string{
+	// The arguments NetBox requires (device_type_id, role_id, site_id).
+	"netbox_device": {
+		"device_type_id": "netbox_device_type",
+		"role_id":        "netbox_device_role",
+		"site_id":        "netbox_site",
+	},
+	"netbox_device_type": {
+		"manufacturer_id": "netbox_manufacturer",
+	},
+	"netbox_cluster": {
+		"cluster_type_id": "netbox_cluster_type",
+	},
 	// NetBox requires a virtual machine to be assigned to a site and/or a
 	// cluster ("A virtual machine must be assigned to a site and/or cluster.").
 	"netbox_virtual_machine": {

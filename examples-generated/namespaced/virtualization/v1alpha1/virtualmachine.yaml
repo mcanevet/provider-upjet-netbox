@@ -34,8 +34,25 @@ metadata:
   namespace: crossplane-system
 spec:
   forProvider:
-    clusterTypeId: ${netbox_cluster_type.test.id}
+    clusterTypeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
     name: test-cluster
+
+---
+
+apiVersion: virtualization.netbox.m.crossplane.io/v1alpha1
+kind: ClusterType
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachine
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+  namespace: crossplane-system
+spec:
+  forProvider:
+    name: test-cluster-type
 
 ---
 

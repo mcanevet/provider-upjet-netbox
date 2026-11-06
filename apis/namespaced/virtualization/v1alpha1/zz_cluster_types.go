@@ -21,7 +21,16 @@ type ClusterInitParameters struct {
 
 	// (Number) Id of the cluster type.
 	// Id of the cluster type.
+	// +crossplane:generate:reference:type=github.com/mcanevet/provider-upjet-netbox/apis/namespaced/virtualization/v1alpha1.ClusterType
 	ClusterTypeID *float64 `json:"clusterTypeId,omitempty" tf:"cluster_type_id,omitempty"`
+
+	// Reference to a ClusterType in virtualization to populate clusterTypeId.
+	// +kubebuilder:validation:Optional
+	ClusterTypeIDRef *v2.NamespacedReference `json:"clusterTypeIdRef,omitempty" tf:"-"`
+
+	// Selector for a ClusterType in virtualization to populate clusterTypeId.
+	// +kubebuilder:validation:Optional
+	ClusterTypeIDSelector *v2.NamespacedSelector `json:"clusterTypeIdSelector,omitempty" tf:"-"`
 
 	// (String)
 	Comments *string `json:"comments,omitempty" tf:"comments,omitempty"`
@@ -179,8 +188,17 @@ type ClusterParameters struct {
 
 	// (Number) Id of the cluster type.
 	// Id of the cluster type.
+	// +crossplane:generate:reference:type=github.com/mcanevet/provider-upjet-netbox/apis/namespaced/virtualization/v1alpha1.ClusterType
 	// +kubebuilder:validation:Optional
 	ClusterTypeID *float64 `json:"clusterTypeId,omitempty" tf:"cluster_type_id,omitempty"`
+
+	// Reference to a ClusterType in virtualization to populate clusterTypeId.
+	// +kubebuilder:validation:Optional
+	ClusterTypeIDRef *v2.NamespacedReference `json:"clusterTypeIdRef,omitempty" tf:"-"`
+
+	// Selector for a ClusterType in virtualization to populate clusterTypeId.
+	// +kubebuilder:validation:Optional
+	ClusterTypeIDSelector *v2.NamespacedSelector `json:"clusterTypeIdSelector,omitempty" tf:"-"`
 
 	// (String)
 	// +kubebuilder:validation:Optional
@@ -288,7 +306,6 @@ type ClusterStatus struct {
 type Cluster struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.clusterTypeId) || (has(self.initProvider) && has(self.initProvider.clusterTypeId))",message="spec.forProvider.clusterTypeId is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	Spec   ClusterSpec   `json:"spec"`
 	Status ClusterStatus `json:"status,omitempty"`

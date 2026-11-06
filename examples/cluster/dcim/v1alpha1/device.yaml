@@ -1,0 +1,83 @@
+apiVersion: dcim.netbox.crossplane.io/v1alpha1
+kind: Device
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: e2e
+  name: e2e
+spec:
+  forProvider:
+    name: e2e-cluster-device
+    status: active
+    description: created by uptest
+    # NetBox requires a device type, a role and a site.
+    deviceTypeIdRef:
+      name: e2e-device
+    roleIdRef:
+      name: e2e-device
+    siteIdRef:
+      name: e2e-device
+
+---
+
+apiVersion: dcim.netbox.crossplane.io/v1alpha1
+kind: DeviceType
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: e2e-device
+  name: e2e-device
+spec:
+  forProvider:
+    model: e2e-cluster-model
+    slug: e2e-cluster-model
+    manufacturerIdRef:
+      name: e2e-device
+
+---
+
+apiVersion: dcim.netbox.crossplane.io/v1alpha1
+kind: Manufacturer
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: e2e-device
+  name: e2e-device
+spec:
+  forProvider:
+    name: e2e-cluster-manufacturer
+    slug: e2e-cluster-manufacturer
+
+---
+
+apiVersion: dcim.netbox.crossplane.io/v1alpha1
+kind: DeviceRole
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: e2e-device
+  name: e2e-device
+spec:
+  forProvider:
+    name: e2e-cluster-device-role
+    slug: e2e-cluster-device-role
+
+---
+
+apiVersion: dcim.netbox.crossplane.io/v1alpha1
+kind: Site
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: e2e-device
+  name: e2e-device
+spec:
+  forProvider:
+    name: e2e-cluster-device-site
+    slug: e2e-cluster-device-site
+    status: active

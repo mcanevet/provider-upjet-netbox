@@ -11,20 +11,31 @@ type groupKind struct {
 	kind  string
 }
 
+// API groups (short, without root group), named after NetBox's apps.
+const (
+	groupDCIM           = "dcim"
+	groupTenancy        = "tenancy"
+	groupIPAM           = "ipam"
+	groupVirtualization = "virtualization"
+)
+
 // groupKinds maps Terraform resource names to NetBox-app-aligned API groups
 // (dcim, tenancy, ipam, virtualization). Without this, upjet's default naming
 // splits on the first underscore and yields e.g. group "virtual", kind
 // "Machine" for netbox_virtual_machine.
 var groupKinds = map[string]groupKind{
-	"netbox_device":          {"dcim", "Device"},
-	"netbox_device_role":     {"dcim", "DeviceRole"},
-	"netbox_site":            {"dcim", "Site"},
-	"netbox_tenant":          {"tenancy", "Tenant"},
-	"netbox_ip_address":      {"ipam", "IPAddress"},
-	"netbox_prefix":          {"ipam", "Prefix"},
-	"netbox_vlan":            {"ipam", "VLAN"},
-	"netbox_cluster":         {"virtualization", "Cluster"},
-	"netbox_virtual_machine": {"virtualization", "VirtualMachine"},
+	"netbox_device":          {groupDCIM, "Device"},
+	"netbox_device_role":     {groupDCIM, "DeviceRole"},
+	"netbox_device_type":     {groupDCIM, "DeviceType"},
+	"netbox_manufacturer":    {groupDCIM, "Manufacturer"},
+	"netbox_site":            {groupDCIM, "Site"},
+	"netbox_tenant":          {groupTenancy, "Tenant"},
+	"netbox_ip_address":      {groupIPAM, "IPAddress"},
+	"netbox_prefix":          {groupIPAM, "Prefix"},
+	"netbox_vlan":            {groupIPAM, "VLAN"},
+	"netbox_cluster":         {groupVirtualization, "Cluster"},
+	"netbox_cluster_type":    {groupVirtualization, "ClusterType"},
+	"netbox_virtual_machine": {groupVirtualization, "VirtualMachine"},
 }
 
 // GroupKindOverrides sets the short group and kind for known resources.
