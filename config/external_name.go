@@ -14,11 +14,12 @@ import (
 // crossplane/upjet#792 (see the replace directive in go.mod).
 var ExternalNameConfigs = map[string]config.ExternalName{
 	// dcim
-	"netbox_device":       config.IdentifierFromProvider,
-	"netbox_device_role":  config.IdentifierFromProvider,
-	"netbox_device_type":  config.IdentifierFromProvider,
-	"netbox_manufacturer": config.IdentifierFromProvider,
-	"netbox_site":         config.IdentifierFromProvider,
+	"netbox_device":           config.IdentifierFromProvider,
+	"netbox_device_interface": config.IdentifierFromProvider,
+	"netbox_device_role":      config.IdentifierFromProvider,
+	"netbox_device_type":      config.IdentifierFromProvider,
+	"netbox_manufacturer":     config.IdentifierFromProvider,
+	"netbox_site":             config.IdentifierFromProvider,
 	// tenancy
 	"netbox_tenant": config.IdentifierFromProvider,
 	// ipam
@@ -26,9 +27,10 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"netbox_prefix":     config.IdentifierFromProvider,
 	"netbox_vlan":       config.IdentifierFromProvider,
 	// virtualization
-	"netbox_cluster":         config.IdentifierFromProvider,
-	"netbox_cluster_type":    config.IdentifierFromProvider,
-	"netbox_virtual_machine": config.IdentifierFromProvider,
+	"netbox_cluster":                   config.IdentifierFromProvider,
+	"netbox_cluster_type":              config.IdentifierFromProvider,
+	"netbox_virtual_machine":           config.IdentifierFromProvider,
+	"netbox_virtual_machine_interface": config.IdentifierFromProvider,
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the

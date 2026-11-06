@@ -30,3 +30,21 @@ spec:
     name: e2e-cluster-vm-site
     slug: e2e-cluster-vm-site
     status: active
+
+---
+
+apiVersion: virtualization.netbox.crossplane.io/v1alpha1
+kind: VirtualMachineInterface
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachine
+  labels:
+    testing.upbound.io/example-name: e2e-vm
+  name: e2e-vm
+spec:
+  forProvider:
+    name: eth0
+    enabled: true
+    description: created by uptest
+    virtualMachineIdRef:
+      name: e2e

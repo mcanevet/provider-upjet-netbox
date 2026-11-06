@@ -15,6 +15,9 @@ var references = map[string]map[string]string{
 		"role_id":        "netbox_device_role",
 		"site_id":        "netbox_site",
 	},
+	"netbox_device_interface": {
+		"device_id": "netbox_device",
+	},
 	"netbox_device_type": {
 		"manufacturer_id": "netbox_manufacturer",
 	},
@@ -25,6 +28,9 @@ var references = map[string]map[string]string{
 	// cluster ("A virtual machine must be assigned to a site and/or cluster.").
 	"netbox_virtual_machine": {
 		"site_id": "netbox_site",
+	},
+	"netbox_virtual_machine_interface": {
+		"virtual_machine_id": "netbox_virtual_machine",
 	},
 }
 

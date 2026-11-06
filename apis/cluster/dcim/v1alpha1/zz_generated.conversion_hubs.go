@@ -10,6 +10,9 @@ package v1alpha1
 func (tr *Device) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *DeviceInterface) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *DeviceRole) Hub() {}
 
 // Hub marks this type as a conversion hub.

@@ -14,3 +14,6 @@ func (tr *ClusterType) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *VirtualMachine) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *VirtualMachineInterface) Hub() {}

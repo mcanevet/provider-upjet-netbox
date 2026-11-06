@@ -101,3 +101,26 @@ spec:
   providerConfigRef:
     kind: ClusterProviderConfig
     name: default
+
+---
+
+apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
+kind: DeviceInterface
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: e2e-device
+  name: e2e-device
+  namespace: default
+spec:
+  forProvider:
+    name: eth0
+    type: 1000base-t
+    enabled: true
+    description: created by uptest
+    deviceIdRef:
+      name: e2e
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default

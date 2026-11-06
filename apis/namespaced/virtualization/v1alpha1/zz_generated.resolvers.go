@@ -101,3 +101,47 @@ func (mg *VirtualMachine) ResolveReferences(ctx context.Context, c client.Reader
 
 	return nil
 }
+
+// ResolveReferences of this VirtualMachineInterface.
+func (mg *VirtualMachineInterface) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPINamespacedResolver(c, mg)
+
+	var rsp reference.NamespacedResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+		CurrentValue: reference.FromFloatPtrValue(mg.Spec.ForProvider.VirtualMachineID),
+		Extract:      reference.ExternalName(),
+		Namespace:    mg.GetNamespace(),
+		Reference:    mg.Spec.ForProvider.VirtualMachineIDRef,
+		Selector:     mg.Spec.ForProvider.VirtualMachineIDSelector,
+		To: reference.To{
+			List:    &VirtualMachineList{},
+			Managed: &VirtualMachine{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.VirtualMachineID")
+	}
+	mg.Spec.ForProvider.VirtualMachineID = reference.ToFloatPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.VirtualMachineIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+		CurrentValue: reference.FromFloatPtrValue(mg.Spec.InitProvider.VirtualMachineID),
+		Extract:      reference.ExternalName(),
+		Namespace:    mg.GetNamespace(),
+		Reference:    mg.Spec.InitProvider.VirtualMachineIDRef,
+		Selector:     mg.Spec.InitProvider.VirtualMachineIDSelector,
+		To: reference.To{
+			List:    &VirtualMachineList{},
+			Managed: &VirtualMachine{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.VirtualMachineID")
+	}
+	mg.Spec.InitProvider.VirtualMachineID = reference.ToFloatPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.VirtualMachineIDRef = rsp.ResolvedReference
+
+	return nil
+}

@@ -1,0 +1,998 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.20.1
+  name: deviceinterfaces.dcim.netbox.m.crossplane.io
+spec:
+  group: dcim.netbox.m.crossplane.io
+  names:
+    categories:
+    - crossplane
+    - managed
+    - netbox
+    kind: DeviceInterface
+    listKind: DeviceInterfaceList
+    plural: deviceinterfaces
+    singular: deviceinterface
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: 'DeviceInterface is the Schema for the DeviceInterfaces API.
+          A device interface (dcim.interface). From the official documentation https://netboxlabs.com/docs/netbox/models/dcim/interface/:
+          Interfaces in NetBox represent network interfaces used to exchange data
+          with connected devices. On modern networks, these are most commonly Ethernet,
+          but other types are supported as well. IP addresses and VLANs can be assigned
+          to interfaces.'
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: DeviceInterfaceSpec defines the desired state of DeviceInterface
+            properties:
+              forProvider:
+                properties:
+                  bridgeId:
+                    description: |-
+                      (Number) Id of the bridge interface.
+                      Id of the bridge interface.
+                    type: number
+                  customFields:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      (Map of String) Custom field values by field name. Every value is a string; NetBox coerces numbers and booleans. An object field holds the related object's id, e.g. "12", a multiobject field a JSON list of ids in any order, e.g. jsonencode([12, 13]). A key removed from the map is cleared in NetBox (set {} to clear all).
+                      Custom field values by field name. Every value is a string; NetBox coerces numbers and booleans. An object field holds the related object's id, e.g. "12", a multiobject field a JSON list of ids in any order, e.g. jsonencode([12, 13]). A key removed from the map is cleared in NetBox (set {} to clear all).
+                    type: object
+                    x-kubernetes-map-type: granular
+                  description:
+                    description: (String)
+                    type: string
+                  deviceId:
+                    description: |-
+                      (Number) Id of the device.
+                      Id of the device.
+                    type: number
+                  deviceIdRef:
+                    description: Reference to a Device in dcim to populate deviceId.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      namespace:
+                        description: Namespace of the referenced object
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  deviceIdSelector:
+                    description: Selector for a Device in dcim to populate deviceId.
+                    properties:
+                      matchControllerRef:
+                        description: |-
+                          MatchControllerRef ensures an object with the same controller reference
+                          as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                      namespace:
+                        description: Namespace for the selector
+                        type: string
+                      policy:
+                        description: Policies for selection.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    type: object
+                  duplex:
+                    description: |-
+                      (String) One of: half, full, auto.
+                      One of: half, full, auto.
+                    type: string
+                  enabled:
+                    description: |-
+                      (Boolean) Whether the interface is enabled.
+                      Whether the interface is enabled.
+                    type: boolean
+                  label:
+                    description: |-
+                      (String) Physical label.
+                      Physical label.
+                    type: string
+                  lagDeviceInterfaceId:
+                    description: |-
+                      (Number) Id of the parent LAG interface.
+                      Id of the parent LAG interface.
+                    type: number
+                  markConnected:
+                    description: |-
+                      (Boolean) Treat as if a cable is connected.
+                      Treat as if a cable is connected.
+                    type: boolean
+                  mgmtOnly:
+                    description: |-
+                      of-band management only.
+                      Whether the interface is used for out-of-band management only.
+                    type: boolean
+                  mgmtonly:
+                    description: |-
+                      (Boolean, Deprecated) Deprecated alias of mgmt_only.
+                      Deprecated alias of mgmt_only.
+                    type: boolean
+                  mode:
+                    description: |-
+                      all, q-in-q.
+                      802.1Q tagging mode. One of: access, tagged, tagged-all, q-in-q.
+                    type: string
+                  moduleId:
+                    description: |-
+                      (Number) Id of the installed module this interface belongs to.
+                      Id of the installed module this interface belongs to.
+                    type: number
+                  mtu:
+                    description: |-
+                      (Number) Must be a whole number.
+                      Must be a whole number.
+                    type: number
+                  name:
+                    description: (String)
+                    type: string
+                  ownerId:
+                    description: |-
+                      (Number) Id of the owner the object is assigned to.
+                      Id of the owner the object is assigned to.
+                    type: number
+                  parentDeviceInterfaceId:
+                    description: |-
+                      (Number) Id of the parent interface.
+                      Id of the parent interface.
+                    type: number
+                  poeMode:
+                    description: |-
+                      (String) Power over Ethernet mode. One of: pd, pse.
+                      Power over Ethernet mode. One of: pd, pse.
+                    type: string
+                  poeType:
+                    description: |-
+                      ieee802.3af, type3-ieee802.3bt, passive-24v-2pair (any of NetBox's PoE type choices).
+                      Power over Ethernet type as its NetBox slug, e.g. type1-ieee802.3af, type3-ieee802.3bt, passive-24v-2pair (any of NetBox's PoE type choices).
+                    type: string
+                  qinqSvlanId:
+                    description: |-
+                      in-Q service VLAN.
+                      Id of the Q-in-Q service VLAN.
+                    type: number
+                  rfChannel:
+                    description: |-
+                      1-2412-22, 5g-36-5180-20 (any of NetBox's wireless channel choices).
+                      Wireless channel as its NetBox slug, e.g. 2.4g-1-2412-22, 5g-36-5180-20 (any of NetBox's wireless channel choices).
+                    type: string
+                  rfChannelFrequency:
+                    description: |-
+                      (Number) Channel frequency in MHz. NetBox derives it from rf_channel when that is set.
+                      Channel frequency in MHz. NetBox derives it from rf_channel when that is set.
+                    type: number
+                  rfChannelWidth:
+                    description: |-
+                      (Number) Channel width in MHz. NetBox derives it from rf_channel when that is set.
+                      Channel width in MHz. NetBox derives it from rf_channel when that is set.
+                    type: number
+                  rfRole:
+                    description: |-
+                      (String) Wireless role. One of: ap, station.
+                      Wireless role. One of: ap, station.
+                    type: string
+                  speed:
+                    description: |-
+                      (Number) Speed in kbps. Must be a whole number.
+                      Speed in kbps. Must be a whole number.
+                    type: number
+                  taggedVlanIds:
+                    description: |-
+                      (Set of Number) Ids of the tagged VLANs.
+                      Ids of the tagged VLANs.
+                    items:
+                      type: number
+                    type: array
+                    x-kubernetes-list-type: set
+                  taggedVlans:
+                    description: |-
+                      (Set of Number, Deprecated) Deprecated alias of tagged_vlan_ids.
+                      Deprecated alias of tagged_vlan_ids.
+                    items:
+                      type: number
+                    type: array
+                    x-kubernetes-list-type: set
+                  tags:
+                    description: |-
+                      (Set of String) Slugs of the tags assigned to the object (the provider's default_tags are added on top, see tags_all).
+                      Slugs of the tags assigned to the object (the provider's default_tags are added on top, see tags_all).
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  txPower:
+                    description: |-
+                      (Number) Transmit power in dBm. Must be a whole number.
+                      Transmit power in dBm. Must be a whole number.
+                    type: number
+                  type:
+                    description: |-
+                      t, 10gbase-x-sfpp (any of NetBox's interface type choices).
+                      Interface type as its NetBox slug, e.g. virtual, lag, bridge, 1000base-t, 10gbase-x-sfpp (any of NetBox's interface type choices).
+                    type: string
+                  untaggedVlan:
+                    description: |-
+                      (Number, Deprecated) Deprecated alias of untagged_vlan_id.
+                      Deprecated alias of untagged_vlan_id.
+                    type: number
+                  untaggedVlanId:
+                    description: |-
+                      (Number) Id of the untagged VLAN.
+                      Id of the untagged VLAN.
+                    type: number
+                  vdcIds:
+                    description: |-
+                      (Set of Number) Ids of the virtual device contexts.
+                      Ids of the virtual device contexts.
+                    items:
+                      type: number
+                    type: array
+                    x-kubernetes-list-type: set
+                  vlanTranslationPolicyId:
+                    description: |-
+                      (Number) Id of the VLAN translation policy.
+                      Id of the VLAN translation policy.
+                    type: number
+                  vrfId:
+                    description: |-
+                      (Number) Id of the VRF.
+                      Id of the VRF.
+                    type: number
+                  wirelessLanIds:
+                    description: |-
+                      (Set of Number) Ids of the wireless LANs.
+                      Ids of the wireless LANs.
+                    items:
+                      type: number
+                    type: array
+                    x-kubernetes-list-type: set
+                  wwn:
+                    description: |-
+                      bit World Wide Name.
+                      64-bit World Wide Name.
+                    type: string
+                type: object
+              initProvider:
+                description: |-
+                  THIS IS A BETA FIELD. It will be honored
+                  unless the Management Policies feature flag is disabled.
+                  InitProvider holds the same fields as ForProvider, with the exception
+                  of Identifier and other resource reference fields. The fields that are
+                  in InitProvider are merged into ForProvider when the resource is created.
+                  The same fields are also added to the terraform ignore_changes hook, to
+                  avoid updating them after creation. This is useful for fields that are
+                  required on creation, but we do not desire to update them after creation,
+                  for example because of an external controller is managing them, like an
+                  autoscaler.
+                properties:
+                  bridgeId:
+                    description: |-
+                      (Number) Id of the bridge interface.
+                      Id of the bridge interface.
+                    type: number
+                  customFields:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      (Map of String) Custom field values by field name. Every value is a string; NetBox coerces numbers and booleans. An object field holds the related object's id, e.g. "12", a multiobject field a JSON list of ids in any order, e.g. jsonencode([12, 13]). A key removed from the map is cleared in NetBox (set {} to clear all).
+                      Custom field values by field name. Every value is a string; NetBox coerces numbers and booleans. An object field holds the related object's id, e.g. "12", a multiobject field a JSON list of ids in any order, e.g. jsonencode([12, 13]). A key removed from the map is cleared in NetBox (set {} to clear all).
+                    type: object
+                    x-kubernetes-map-type: granular
+                  description:
+                    description: (String)
+                    type: string
+                  deviceId:
+                    description: |-
+                      (Number) Id of the device.
+                      Id of the device.
+                    type: number
+                  deviceIdRef:
+                    description: Reference to a Device in dcim to populate deviceId.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      namespace:
+                        description: Namespace of the referenced object
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  deviceIdSelector:
+                    description: Selector for a Device in dcim to populate deviceId.
+                    properties:
+                      matchControllerRef:
+                        description: |-
+                          MatchControllerRef ensures an object with the same controller reference
+                          as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                      namespace:
+                        description: Namespace for the selector
+                        type: string
+                      policy:
+                        description: Policies for selection.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    type: object
+                  duplex:
+                    description: |-
+                      (String) One of: half, full, auto.
+                      One of: half, full, auto.
+                    type: string
+                  enabled:
+                    description: |-
+                      (Boolean) Whether the interface is enabled.
+                      Whether the interface is enabled.
+                    type: boolean
+                  label:
+                    description: |-
+                      (String) Physical label.
+                      Physical label.
+                    type: string
+                  lagDeviceInterfaceId:
+                    description: |-
+                      (Number) Id of the parent LAG interface.
+                      Id of the parent LAG interface.
+                    type: number
+                  markConnected:
+                    description: |-
+                      (Boolean) Treat as if a cable is connected.
+                      Treat as if a cable is connected.
+                    type: boolean
+                  mgmtOnly:
+                    description: |-
+                      of-band management only.
+                      Whether the interface is used for out-of-band management only.
+                    type: boolean
+                  mgmtonly:
+                    description: |-
+                      (Boolean, Deprecated) Deprecated alias of mgmt_only.
+                      Deprecated alias of mgmt_only.
+                    type: boolean
+                  mode:
+                    description: |-
+                      all, q-in-q.
+                      802.1Q tagging mode. One of: access, tagged, tagged-all, q-in-q.
+                    type: string
+                  moduleId:
+                    description: |-
+                      (Number) Id of the installed module this interface belongs to.
+                      Id of the installed module this interface belongs to.
+                    type: number
+                  mtu:
+                    description: |-
+                      (Number) Must be a whole number.
+                      Must be a whole number.
+                    type: number
+                  name:
+                    description: (String)
+                    type: string
+                  ownerId:
+                    description: |-
+                      (Number) Id of the owner the object is assigned to.
+                      Id of the owner the object is assigned to.
+                    type: number
+                  parentDeviceInterfaceId:
+                    description: |-
+                      (Number) Id of the parent interface.
+                      Id of the parent interface.
+                    type: number
+                  poeMode:
+                    description: |-
+                      (String) Power over Ethernet mode. One of: pd, pse.
+                      Power over Ethernet mode. One of: pd, pse.
+                    type: string
+                  poeType:
+                    description: |-
+                      ieee802.3af, type3-ieee802.3bt, passive-24v-2pair (any of NetBox's PoE type choices).
+                      Power over Ethernet type as its NetBox slug, e.g. type1-ieee802.3af, type3-ieee802.3bt, passive-24v-2pair (any of NetBox's PoE type choices).
+                    type: string
+                  qinqSvlanId:
+                    description: |-
+                      in-Q service VLAN.
+                      Id of the Q-in-Q service VLAN.
+                    type: number
+                  rfChannel:
+                    description: |-
+                      1-2412-22, 5g-36-5180-20 (any of NetBox's wireless channel choices).
+                      Wireless channel as its NetBox slug, e.g. 2.4g-1-2412-22, 5g-36-5180-20 (any of NetBox's wireless channel choices).
+                    type: string
+                  rfChannelFrequency:
+                    description: |-
+                      (Number) Channel frequency in MHz. NetBox derives it from rf_channel when that is set.
+                      Channel frequency in MHz. NetBox derives it from rf_channel when that is set.
+                    type: number
+                  rfChannelWidth:
+                    description: |-
+                      (Number) Channel width in MHz. NetBox derives it from rf_channel when that is set.
+                      Channel width in MHz. NetBox derives it from rf_channel when that is set.
+                    type: number
+                  rfRole:
+                    description: |-
+                      (String) Wireless role. One of: ap, station.
+                      Wireless role. One of: ap, station.
+                    type: string
+                  speed:
+                    description: |-
+                      (Number) Speed in kbps. Must be a whole number.
+                      Speed in kbps. Must be a whole number.
+                    type: number
+                  taggedVlanIds:
+                    description: |-
+                      (Set of Number) Ids of the tagged VLANs.
+                      Ids of the tagged VLANs.
+                    items:
+                      type: number
+                    type: array
+                    x-kubernetes-list-type: set
+                  taggedVlans:
+                    description: |-
+                      (Set of Number, Deprecated) Deprecated alias of tagged_vlan_ids.
+                      Deprecated alias of tagged_vlan_ids.
+                    items:
+                      type: number
+                    type: array
+                    x-kubernetes-list-type: set
+                  tags:
+                    description: |-
+                      (Set of String) Slugs of the tags assigned to the object (the provider's default_tags are added on top, see tags_all).
+                      Slugs of the tags assigned to the object (the provider's default_tags are added on top, see tags_all).
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  txPower:
+                    description: |-
+                      (Number) Transmit power in dBm. Must be a whole number.
+                      Transmit power in dBm. Must be a whole number.
+                    type: number
+                  type:
+                    description: |-
+                      t, 10gbase-x-sfpp (any of NetBox's interface type choices).
+                      Interface type as its NetBox slug, e.g. virtual, lag, bridge, 1000base-t, 10gbase-x-sfpp (any of NetBox's interface type choices).
+                    type: string
+                  untaggedVlan:
+                    description: |-
+                      (Number, Deprecated) Deprecated alias of untagged_vlan_id.
+                      Deprecated alias of untagged_vlan_id.
+                    type: number
+                  untaggedVlanId:
+                    description: |-
+                      (Number) Id of the untagged VLAN.
+                      Id of the untagged VLAN.
+                    type: number
+                  vdcIds:
+                    description: |-
+                      (Set of Number) Ids of the virtual device contexts.
+                      Ids of the virtual device contexts.
+                    items:
+                      type: number
+                    type: array
+                    x-kubernetes-list-type: set
+                  vlanTranslationPolicyId:
+                    description: |-
+                      (Number) Id of the VLAN translation policy.
+                      Id of the VLAN translation policy.
+                    type: number
+                  vrfId:
+                    description: |-
+                      (Number) Id of the VRF.
+                      Id of the VRF.
+                    type: number
+                  wirelessLanIds:
+                    description: |-
+                      (Set of Number) Ids of the wireless LANs.
+                      Ids of the wireless LANs.
+                    items:
+                      type: number
+                    type: array
+                    x-kubernetes-list-type: set
+                  wwn:
+                    description: |-
+                      bit World Wide Name.
+                      64-bit World Wide Name.
+                    type: string
+                type: object
+              managementPolicies:
+                default:
+                - '*'
+                description: |-
+                  THIS IS A BETA FIELD. It is on by default but can be opted out
+                  through a Crossplane feature flag.
+                  ManagementPolicies specify the array of actions Crossplane is allowed to
+                  take on the managed and external resources.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                  and this one: https://github.com/crossplane/crossplane/blob/444267e84783136daa93568b364a5f01228cacbe/design/one-pager-ignore-changes.md
+                items:
+                  description: |-
+                    A ManagementAction represents an action that the Crossplane controllers
+                    can take on an external resource.
+                  enum:
+                  - Observe
+                  - Create
+                  - Update
+                  - Delete
+                  - LateInitialize
+                  - '*'
+                  type: string
+                type: array
+              providerConfigRef:
+                default:
+                  kind: ClusterProviderConfig
+                  name: default
+                description: |-
+                  ProviderConfigReference specifies how the provider that will be used to
+                  create, observe, update, and delete this managed resource should be
+                  configured.
+                properties:
+                  kind:
+                    description: Kind of the referenced object.
+                    type: string
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                required:
+                - kind
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: |-
+                  WriteConnectionSecretToReference specifies the namespace and name of a
+                  Secret to which any connection details for this managed resource should
+                  be written. Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                required:
+                - name
+                type: object
+            required:
+            - forProvider
+            type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
+            - message: spec.forProvider.type is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.type)
+                || (has(self.initProvider) && has(self.initProvider.type))'
+          status:
+            description: DeviceInterfaceStatus defines the observed state of DeviceInterface.
+            properties:
+              atProvider:
+                properties:
+                  bridgeId:
+                    description: |-
+                      (Number) Id of the bridge interface.
+                      Id of the bridge interface.
+                    type: number
+                  created:
+                    description: (String)
+                    type: string
+                  customFields:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      (Map of String) Custom field values by field name. Every value is a string; NetBox coerces numbers and booleans. An object field holds the related object's id, e.g. "12", a multiobject field a JSON list of ids in any order, e.g. jsonencode([12, 13]). A key removed from the map is cleared in NetBox (set {} to clear all).
+                      Custom field values by field name. Every value is a string; NetBox coerces numbers and booleans. An object field holds the related object's id, e.g. "12", a multiobject field a JSON list of ids in any order, e.g. jsonencode([12, 13]). A key removed from the map is cleared in NetBox (set {} to clear all).
+                    type: object
+                    x-kubernetes-map-type: granular
+                  description:
+                    description: (String)
+                    type: string
+                  deviceId:
+                    description: |-
+                      (Number) Id of the device.
+                      Id of the device.
+                    type: number
+                  duplex:
+                    description: |-
+                      (String) One of: half, full, auto.
+                      One of: half, full, auto.
+                    type: string
+                  enabled:
+                    description: |-
+                      (Boolean) Whether the interface is enabled.
+                      Whether the interface is enabled.
+                    type: boolean
+                  id:
+                    description: (Number) NetBox id.
+                    type: string
+                  label:
+                    description: |-
+                      (String) Physical label.
+                      Physical label.
+                    type: string
+                  lagDeviceInterfaceId:
+                    description: |-
+                      (Number) Id of the parent LAG interface.
+                      Id of the parent LAG interface.
+                    type: number
+                  lastUpdated:
+                    description: (String)
+                    type: string
+                  markConnected:
+                    description: |-
+                      (Boolean) Treat as if a cable is connected.
+                      Treat as if a cable is connected.
+                    type: boolean
+                  mgmtOnly:
+                    description: |-
+                      of-band management only.
+                      Whether the interface is used for out-of-band management only.
+                    type: boolean
+                  mgmtonly:
+                    description: |-
+                      (Boolean, Deprecated) Deprecated alias of mgmt_only.
+                      Deprecated alias of mgmt_only.
+                    type: boolean
+                  mode:
+                    description: |-
+                      all, q-in-q.
+                      802.1Q tagging mode. One of: access, tagged, tagged-all, q-in-q.
+                    type: string
+                  moduleId:
+                    description: |-
+                      (Number) Id of the installed module this interface belongs to.
+                      Id of the installed module this interface belongs to.
+                    type: number
+                  mtu:
+                    description: |-
+                      (Number) Must be a whole number.
+                      Must be a whole number.
+                    type: number
+                  name:
+                    description: (String)
+                    type: string
+                  ownerId:
+                    description: |-
+                      (Number) Id of the owner the object is assigned to.
+                      Id of the owner the object is assigned to.
+                    type: number
+                  parentDeviceInterfaceId:
+                    description: |-
+                      (Number) Id of the parent interface.
+                      Id of the parent interface.
+                    type: number
+                  poeMode:
+                    description: |-
+                      (String) Power over Ethernet mode. One of: pd, pse.
+                      Power over Ethernet mode. One of: pd, pse.
+                    type: string
+                  poeType:
+                    description: |-
+                      ieee802.3af, type3-ieee802.3bt, passive-24v-2pair (any of NetBox's PoE type choices).
+                      Power over Ethernet type as its NetBox slug, e.g. type1-ieee802.3af, type3-ieee802.3bt, passive-24v-2pair (any of NetBox's PoE type choices).
+                    type: string
+                  qinqSvlanId:
+                    description: |-
+                      in-Q service VLAN.
+                      Id of the Q-in-Q service VLAN.
+                    type: number
+                  rfChannel:
+                    description: |-
+                      1-2412-22, 5g-36-5180-20 (any of NetBox's wireless channel choices).
+                      Wireless channel as its NetBox slug, e.g. 2.4g-1-2412-22, 5g-36-5180-20 (any of NetBox's wireless channel choices).
+                    type: string
+                  rfChannelFrequency:
+                    description: |-
+                      (Number) Channel frequency in MHz. NetBox derives it from rf_channel when that is set.
+                      Channel frequency in MHz. NetBox derives it from rf_channel when that is set.
+                    type: number
+                  rfChannelWidth:
+                    description: |-
+                      (Number) Channel width in MHz. NetBox derives it from rf_channel when that is set.
+                      Channel width in MHz. NetBox derives it from rf_channel when that is set.
+                    type: number
+                  rfRole:
+                    description: |-
+                      (String) Wireless role. One of: ap, station.
+                      Wireless role. One of: ap, station.
+                    type: string
+                  speed:
+                    description: |-
+                      (Number) Speed in kbps. Must be a whole number.
+                      Speed in kbps. Must be a whole number.
+                    type: number
+                  taggedVlanIds:
+                    description: |-
+                      (Set of Number) Ids of the tagged VLANs.
+                      Ids of the tagged VLANs.
+                    items:
+                      type: number
+                    type: array
+                    x-kubernetes-list-type: set
+                  taggedVlans:
+                    description: |-
+                      (Set of Number, Deprecated) Deprecated alias of tagged_vlan_ids.
+                      Deprecated alias of tagged_vlan_ids.
+                    items:
+                      type: number
+                    type: array
+                    x-kubernetes-list-type: set
+                  tags:
+                    description: |-
+                      (Set of String) Slugs of the tags assigned to the object (the provider's default_tags are added on top, see tags_all).
+                      Slugs of the tags assigned to the object (the provider's default_tags are added on top, see tags_all).
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  tagsAll:
+                    description: |-
+                      (Set of String) Slugs of all tags on the object, including the provider's default_tags.
+                      Slugs of all tags on the object, including the provider's default_tags.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  txPower:
+                    description: |-
+                      (Number) Transmit power in dBm. Must be a whole number.
+                      Transmit power in dBm. Must be a whole number.
+                    type: number
+                  type:
+                    description: |-
+                      t, 10gbase-x-sfpp (any of NetBox's interface type choices).
+                      Interface type as its NetBox slug, e.g. virtual, lag, bridge, 1000base-t, 10gbase-x-sfpp (any of NetBox's interface type choices).
+                    type: string
+                  untaggedVlan:
+                    description: |-
+                      (Number, Deprecated) Deprecated alias of untagged_vlan_id.
+                      Deprecated alias of untagged_vlan_id.
+                    type: number
+                  untaggedVlanId:
+                    description: |-
+                      (Number) Id of the untagged VLAN.
+                      Id of the untagged VLAN.
+                    type: number
+                  url:
+                    description: (String)
+                    type: string
+                  vdcIds:
+                    description: |-
+                      (Set of Number) Ids of the virtual device contexts.
+                      Ids of the virtual device contexts.
+                    items:
+                      type: number
+                    type: array
+                    x-kubernetes-list-type: set
+                  vlanTranslationPolicyId:
+                    description: |-
+                      (Number) Id of the VLAN translation policy.
+                      Id of the VLAN translation policy.
+                    type: number
+                  vrfId:
+                    description: |-
+                      (Number) Id of the VRF.
+                      Id of the VRF.
+                    type: number
+                  wirelessLanIds:
+                    description: |-
+                      (Set of Number) Ids of the wireless LANs.
+                      Ids of the wireless LANs.
+                    items:
+                      type: number
+                    type: array
+                    x-kubernetes-list-type: set
+                  wwn:
+                    description: |-
+                      bit World Wide Name.
+                      64-bit World Wide Name.
+                    type: string
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        LastTransitionTime is the last time this condition transitioned from one
+                        status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        A Message containing details about this condition's last transition from
+                        one status to another, if any.
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: |-
+                        Type of this condition. At most one of each condition type may apply to
+                        a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              lastHandledReconcileAt:
+                description: |-
+                  LastHandledReconcileAt holds the value of the most recent
+                  reconcile-requested-at annotation token that the controller has
+                  processed. Users can compare this to the annotation to determine
+                  whether a reconcile request has been handled.
+                type: string
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

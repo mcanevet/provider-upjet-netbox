@@ -24,18 +24,20 @@ const (
 // splits on the first underscore and yields e.g. group "virtual", kind
 // "Machine" for netbox_virtual_machine.
 var groupKinds = map[string]groupKind{
-	"netbox_device":          {groupDCIM, "Device"},
-	"netbox_device_role":     {groupDCIM, "DeviceRole"},
-	"netbox_device_type":     {groupDCIM, "DeviceType"},
-	"netbox_manufacturer":    {groupDCIM, "Manufacturer"},
-	"netbox_site":            {groupDCIM, "Site"},
-	"netbox_tenant":          {groupTenancy, "Tenant"},
-	"netbox_ip_address":      {groupIPAM, "IPAddress"},
-	"netbox_prefix":          {groupIPAM, "Prefix"},
-	"netbox_vlan":            {groupIPAM, "VLAN"},
-	"netbox_cluster":         {groupVirtualization, "Cluster"},
-	"netbox_cluster_type":    {groupVirtualization, "ClusterType"},
-	"netbox_virtual_machine": {groupVirtualization, "VirtualMachine"},
+	"netbox_device":                    {groupDCIM, "Device"},
+	"netbox_device_interface":          {groupDCIM, "DeviceInterface"},
+	"netbox_device_role":               {groupDCIM, "DeviceRole"},
+	"netbox_device_type":               {groupDCIM, "DeviceType"},
+	"netbox_manufacturer":              {groupDCIM, "Manufacturer"},
+	"netbox_site":                      {groupDCIM, "Site"},
+	"netbox_tenant":                    {groupTenancy, "Tenant"},
+	"netbox_ip_address":                {groupIPAM, "IPAddress"},
+	"netbox_prefix":                    {groupIPAM, "Prefix"},
+	"netbox_vlan":                      {groupIPAM, "VLAN"},
+	"netbox_cluster":                   {groupVirtualization, "Cluster"},
+	"netbox_cluster_type":              {groupVirtualization, "ClusterType"},
+	"netbox_virtual_machine":           {groupVirtualization, "VirtualMachine"},
+	"netbox_virtual_machine_interface": {groupVirtualization, "VirtualMachineInterface"},
 }
 
 // GroupKindOverrides sets the short group and kind for known resources.

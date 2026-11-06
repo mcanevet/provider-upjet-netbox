@@ -81,3 +81,22 @@ spec:
     name: e2e-cluster-device-site
     slug: e2e-cluster-device-site
     status: active
+
+---
+
+apiVersion: dcim.netbox.crossplane.io/v1alpha1
+kind: DeviceInterface
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: e2e-device
+  name: e2e-device
+spec:
+  forProvider:
+    name: eth0
+    type: 1000base-t
+    enabled: true
+    description: created by uptest
+    deviceIdRef:
+      name: e2e

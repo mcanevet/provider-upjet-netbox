@@ -127,3 +127,43 @@ func (mg *VirtualMachine) SetProviderConfigReference(r *xpv2.ProviderConfigRefer
 func (mg *VirtualMachine) SetWriteConnectionSecretToReference(r *xpv2.LocalSecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
+
+// GetCondition of this VirtualMachineInterface.
+func (mg *VirtualMachineInterface) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this VirtualMachineInterface.
+func (mg *VirtualMachineInterface) GetManagementPolicies() xpv2.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this VirtualMachineInterface.
+func (mg *VirtualMachineInterface) GetProviderConfigReference() *xpv2.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this VirtualMachineInterface.
+func (mg *VirtualMachineInterface) GetWriteConnectionSecretToReference() *xpv2.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this VirtualMachineInterface.
+func (mg *VirtualMachineInterface) SetConditions(c ...xpv2.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this VirtualMachineInterface.
+func (mg *VirtualMachineInterface) SetManagementPolicies(r xpv2.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this VirtualMachineInterface.
+func (mg *VirtualMachineInterface) SetProviderConfigReference(r *xpv2.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this VirtualMachineInterface.
+func (mg *VirtualMachineInterface) SetWriteConnectionSecretToReference(r *xpv2.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}

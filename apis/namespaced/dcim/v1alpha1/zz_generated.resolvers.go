@@ -125,6 +125,50 @@ func (mg *Device) ResolveReferences(ctx context.Context, c client.Reader) error 
 	return nil
 }
 
+// ResolveReferences of this DeviceInterface.
+func (mg *DeviceInterface) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPINamespacedResolver(c, mg)
+
+	var rsp reference.NamespacedResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+		CurrentValue: reference.FromFloatPtrValue(mg.Spec.ForProvider.DeviceID),
+		Extract:      reference.ExternalName(),
+		Namespace:    mg.GetNamespace(),
+		Reference:    mg.Spec.ForProvider.DeviceIDRef,
+		Selector:     mg.Spec.ForProvider.DeviceIDSelector,
+		To: reference.To{
+			List:    &DeviceList{},
+			Managed: &Device{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.DeviceID")
+	}
+	mg.Spec.ForProvider.DeviceID = reference.ToFloatPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.DeviceIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.NamespacedResolutionRequest{
+		CurrentValue: reference.FromFloatPtrValue(mg.Spec.InitProvider.DeviceID),
+		Extract:      reference.ExternalName(),
+		Namespace:    mg.GetNamespace(),
+		Reference:    mg.Spec.InitProvider.DeviceIDRef,
+		Selector:     mg.Spec.InitProvider.DeviceIDSelector,
+		To: reference.To{
+			List:    &DeviceList{},
+			Managed: &Device{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.DeviceID")
+	}
+	mg.Spec.InitProvider.DeviceID = reference.ToFloatPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.DeviceIDRef = rsp.ResolvedReference
+
+	return nil
+}
+
 // ResolveReferences of this DeviceType.
 func (mg *DeviceType) ResolveReferences(ctx context.Context, c client.Reader) error {
 	r := reference.NewAPINamespacedResolver(c, mg)

@@ -38,3 +38,25 @@ spec:
   providerConfigRef:
     kind: ClusterProviderConfig
     name: default
+
+---
+
+apiVersion: virtualization.netbox.m.crossplane.io/v1alpha1
+kind: VirtualMachineInterface
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachine
+  labels:
+    testing.upbound.io/example-name: e2e-vm
+  name: e2e-vm
+  namespace: default
+spec:
+  forProvider:
+    name: eth0
+    enabled: true
+    description: created by uptest
+    virtualMachineIdRef:
+      name: e2e
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default

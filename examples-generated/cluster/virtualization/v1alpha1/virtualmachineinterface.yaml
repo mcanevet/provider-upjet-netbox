@@ -1,0 +1,97 @@
+apiVersion: virtualization.netbox.crossplane.io/v1alpha1
+kind: VirtualMachineInterface
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachineinterface
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    description: test-description
+    mode: tagged
+    mtu: 1500
+    name: test-virtual-machine-interface
+    taggedVlanIds:
+    - ${netbox_vlan.test_b.id}
+    untaggedVlanId: ${netbox_vlan.test_a.id}
+    virtualMachineIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
+    vrfId: ${netbox_vrf.test.id}
+
+---
+
+apiVersion: virtualization.netbox.crossplane.io/v1alpha1
+kind: Cluster
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachineinterface
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    clusterTypeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
+    name: test-cluster
+
+---
+
+apiVersion: virtualization.netbox.crossplane.io/v1alpha1
+kind: ClusterType
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachineinterface
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    name: test-cluster-type
+
+---
+
+apiVersion: virtualization.netbox.crossplane.io/v1alpha1
+kind: VirtualMachine
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachineinterface
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    clusterId: ${netbox_cluster.test.id}
+    name: test-virtual-machine
+
+---
+
+apiVersion: ipam.netbox.crossplane.io/v1alpha1
+kind: VLAN
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachineinterface
+  labels:
+    testing.upbound.io/example-name: test_a
+  name: test-a
+spec:
+  forProvider:
+    name: test-vlan-a
+    vid: 100
+
+---
+
+apiVersion: ipam.netbox.crossplane.io/v1alpha1
+kind: VLAN
+metadata:
+  annotations:
+    meta.upbound.io/example-id: virtualization/v1alpha1/virtualmachineinterface
+  labels:
+    testing.upbound.io/example-name: test_b
+  name: test-b
+spec:
+  forProvider:
+    name: test-vlan-b
+    vid: 101
