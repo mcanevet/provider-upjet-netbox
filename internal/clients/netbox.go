@@ -40,17 +40,11 @@ const (
 	defaultRequestTimeout = 60
 )
 
-// TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
-// returns Terraform provider setup configuration
-func TerraformSetupBuilder(version, providerSource, providerVersion string) terraform.SetupFn {
+// TerraformSetupBuilder returns the terraform.SetupFn that configures the
+// in-process (no-fork) NetBox provider from the ProviderConfig credentials.
+func TerraformSetupBuilder() terraform.SetupFn {
 	return func(ctx context.Context, client client.Client, mg resource.Managed) (terraform.Setup, error) {
-		ps := terraform.Setup{
-			Version: version,
-			Requirement: terraform.ProviderRequirement{
-				Source:  providerSource,
-				Version: providerVersion,
-			},
-		}
+		ps := terraform.Setup{}
 
 		pcSpec, err := resolveProviderConfig(ctx, client, mg)
 		if err != nil {
