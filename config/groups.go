@@ -29,7 +29,6 @@ var groupKinds = map[string]groupKind{
 	"netbox_device_role":               {groupDCIM, "DeviceRole"},
 	"netbox_device_type":               {groupDCIM, "DeviceType"},
 	"netbox_manufacturer":              {groupDCIM, "Manufacturer"},
-	"netbox_module_bay_template":       {groupDCIM, "ModuleBayTemplate"},
 	"netbox_module_type":               {groupDCIM, "ModuleType"},
 	"netbox_module_type_profile":       {groupDCIM, "ModuleTypeProfile"},
 	"netbox_site":                      {groupDCIM, "Site"},

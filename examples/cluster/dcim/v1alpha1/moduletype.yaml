@@ -50,21 +50,3 @@ spec:
     name: e2e-cluster-module-manufacturer
     slug: e2e-cluster-module-manufacturer
 
----
-
-# A bay on the module type, e.g. for a module nested in it.
-apiVersion: dcim.netbox.crossplane.io/v1alpha1
-kind: ModuleBayTemplate
-metadata:
-  annotations:
-    meta.upbound.io/example-id: dcim/v1alpha1/moduletype
-  labels:
-    testing.upbound.io/example-name: e2e-module
-  name: e2e-module
-spec:
-  forProvider:
-    name: bay0
-    position: "0"
-    description: created by uptest
-    moduleTypeIdRef:
-      name: e2e

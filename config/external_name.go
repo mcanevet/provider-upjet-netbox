@@ -19,7 +19,6 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"netbox_device_role":         config.IdentifierFromProvider,
 	"netbox_device_type":         config.IdentifierFromProvider,
 	"netbox_manufacturer":        config.IdentifierFromProvider,
-	"netbox_module_bay_template": config.IdentifierFromProvider,
 	"netbox_module_type":         config.IdentifierFromProvider,
 	"netbox_module_type_profile": config.IdentifierFromProvider,
 	"netbox_site":                config.IdentifierFromProvider,

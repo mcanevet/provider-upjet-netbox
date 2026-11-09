@@ -208,46 +208,6 @@ func (mg *Manufacturer) SetWriteConnectionSecretToReference(r *xpv2.LocalSecretR
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
-// GetCondition of this ModuleBayTemplate.
-func (mg *ModuleBayTemplate) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
-	return mg.Status.GetCondition(ct)
-}
-
-// GetManagementPolicies of this ModuleBayTemplate.
-func (mg *ModuleBayTemplate) GetManagementPolicies() xpv2.ManagementPolicies {
-	return mg.Spec.ManagementPolicies
-}
-
-// GetProviderConfigReference of this ModuleBayTemplate.
-func (mg *ModuleBayTemplate) GetProviderConfigReference() *xpv2.ProviderConfigReference {
-	return mg.Spec.ProviderConfigReference
-}
-
-// GetWriteConnectionSecretToReference of this ModuleBayTemplate.
-func (mg *ModuleBayTemplate) GetWriteConnectionSecretToReference() *xpv2.LocalSecretReference {
-	return mg.Spec.WriteConnectionSecretToReference
-}
-
-// SetConditions of this ModuleBayTemplate.
-func (mg *ModuleBayTemplate) SetConditions(c ...xpv2.Condition) {
-	mg.Status.SetConditions(c...)
-}
-
-// SetManagementPolicies of this ModuleBayTemplate.
-func (mg *ModuleBayTemplate) SetManagementPolicies(r xpv2.ManagementPolicies) {
-	mg.Spec.ManagementPolicies = r
-}
-
-// SetProviderConfigReference of this ModuleBayTemplate.
-func (mg *ModuleBayTemplate) SetProviderConfigReference(r *xpv2.ProviderConfigReference) {
-	mg.Spec.ProviderConfigReference = r
-}
-
-// SetWriteConnectionSecretToReference of this ModuleBayTemplate.
-func (mg *ModuleBayTemplate) SetWriteConnectionSecretToReference(r *xpv2.LocalSecretReference) {
-	mg.Spec.WriteConnectionSecretToReference = r
-}
-
 // GetCondition of this ModuleType.
 func (mg *ModuleType) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
