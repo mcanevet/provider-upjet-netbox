@@ -14,6 +14,9 @@ import (
 	devicerole "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/devicerole"
 	devicetype "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/devicetype"
 	manufacturer "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/manufacturer"
+	modulebaytemplate "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/modulebaytemplate"
+	moduletype "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/moduletype"
+	moduletypeprofile "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/moduletypeprofile"
 	site "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/site"
 	ipaddress "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/ipam/ipaddress"
 	prefix "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/ipam/prefix"
@@ -35,6 +38,9 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		devicerole.Setup,
 		devicetype.Setup,
 		manufacturer.Setup,
+		modulebaytemplate.Setup,
+		moduletype.Setup,
+		moduletypeprofile.Setup,
 		site.Setup,
 		ipaddress.Setup,
 		prefix.Setup,
@@ -62,6 +68,9 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 		devicerole.SetupGated,
 		devicetype.SetupGated,
 		manufacturer.SetupGated,
+		modulebaytemplate.SetupGated,
+		moduletype.SetupGated,
+		moduletypeprofile.SetupGated,
 		site.SetupGated,
 		ipaddress.SetupGated,
 		prefix.SetupGated,
@@ -88,6 +97,9 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 		devicerole.SetupWebhookWithManager,
 		devicetype.SetupWebhookWithManager,
 		manufacturer.SetupWebhookWithManager,
+		modulebaytemplate.SetupWebhookWithManager,
+		moduletype.SetupWebhookWithManager,
+		moduletypeprofile.SetupWebhookWithManager,
 		site.SetupWebhookWithManager,
 		ipaddress.SetupWebhookWithManager,
 		prefix.SetupWebhookWithManager,

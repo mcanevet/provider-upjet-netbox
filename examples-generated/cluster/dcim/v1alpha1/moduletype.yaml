@@ -1,0 +1,32 @@
+apiVersion: dcim.netbox.crossplane.io/v1alpha1
+kind: ModuleType
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/moduletype
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    description: test-description
+    manufacturerIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: test
+    model: test-module-type
+    partNumber: test-part-number
+    weight: 1.2
+    weightUnit: kg
+
+---
+
+apiVersion: dcim.netbox.crossplane.io/v1alpha1
+kind: Manufacturer
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/moduletype
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    name: test-manufacturer

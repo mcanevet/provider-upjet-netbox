@@ -212,3 +212,159 @@ func (mg *DeviceType) ResolveReferences(ctx context.Context, c client.Reader) er
 
 	return nil
 }
+
+// ResolveReferences of this ModuleBayTemplate.
+func (mg *ModuleBayTemplate) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPIResolver(c, mg)
+
+	var rsp reference.ResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromFloatPtrValue(mg.Spec.ForProvider.DeviceTypeID),
+		Extract:      reference.ExternalName(),
+		Namespace:    mg.GetNamespace(),
+		Reference:    mg.Spec.ForProvider.DeviceTypeIDRef,
+		Selector:     mg.Spec.ForProvider.DeviceTypeIDSelector,
+		To: reference.To{
+			List:    &DeviceTypeList{},
+			Managed: &DeviceType{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.DeviceTypeID")
+	}
+	mg.Spec.ForProvider.DeviceTypeID = reference.ToFloatPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.DeviceTypeIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromFloatPtrValue(mg.Spec.ForProvider.ModuleTypeID),
+		Extract:      reference.ExternalName(),
+		Namespace:    mg.GetNamespace(),
+		Reference:    mg.Spec.ForProvider.ModuleTypeIDRef,
+		Selector:     mg.Spec.ForProvider.ModuleTypeIDSelector,
+		To: reference.To{
+			List:    &ModuleTypeList{},
+			Managed: &ModuleType{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.ModuleTypeID")
+	}
+	mg.Spec.ForProvider.ModuleTypeID = reference.ToFloatPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.ModuleTypeIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromFloatPtrValue(mg.Spec.InitProvider.DeviceTypeID),
+		Extract:      reference.ExternalName(),
+		Namespace:    mg.GetNamespace(),
+		Reference:    mg.Spec.InitProvider.DeviceTypeIDRef,
+		Selector:     mg.Spec.InitProvider.DeviceTypeIDSelector,
+		To: reference.To{
+			List:    &DeviceTypeList{},
+			Managed: &DeviceType{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.DeviceTypeID")
+	}
+	mg.Spec.InitProvider.DeviceTypeID = reference.ToFloatPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.DeviceTypeIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromFloatPtrValue(mg.Spec.InitProvider.ModuleTypeID),
+		Extract:      reference.ExternalName(),
+		Namespace:    mg.GetNamespace(),
+		Reference:    mg.Spec.InitProvider.ModuleTypeIDRef,
+		Selector:     mg.Spec.InitProvider.ModuleTypeIDSelector,
+		To: reference.To{
+			List:    &ModuleTypeList{},
+			Managed: &ModuleType{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.ModuleTypeID")
+	}
+	mg.Spec.InitProvider.ModuleTypeID = reference.ToFloatPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.ModuleTypeIDRef = rsp.ResolvedReference
+
+	return nil
+}
+
+// ResolveReferences of this ModuleType.
+func (mg *ModuleType) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPIResolver(c, mg)
+
+	var rsp reference.ResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromFloatPtrValue(mg.Spec.ForProvider.ManufacturerID),
+		Extract:      reference.ExternalName(),
+		Namespace:    mg.GetNamespace(),
+		Reference:    mg.Spec.ForProvider.ManufacturerIDRef,
+		Selector:     mg.Spec.ForProvider.ManufacturerIDSelector,
+		To: reference.To{
+			List:    &ManufacturerList{},
+			Managed: &Manufacturer{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.ManufacturerID")
+	}
+	mg.Spec.ForProvider.ManufacturerID = reference.ToFloatPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.ManufacturerIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromFloatPtrValue(mg.Spec.ForProvider.ProfileID),
+		Extract:      reference.ExternalName(),
+		Namespace:    mg.GetNamespace(),
+		Reference:    mg.Spec.ForProvider.ProfileIDRef,
+		Selector:     mg.Spec.ForProvider.ProfileIDSelector,
+		To: reference.To{
+			List:    &ModuleTypeProfileList{},
+			Managed: &ModuleTypeProfile{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.ProfileID")
+	}
+	mg.Spec.ForProvider.ProfileID = reference.ToFloatPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.ProfileIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromFloatPtrValue(mg.Spec.InitProvider.ManufacturerID),
+		Extract:      reference.ExternalName(),
+		Namespace:    mg.GetNamespace(),
+		Reference:    mg.Spec.InitProvider.ManufacturerIDRef,
+		Selector:     mg.Spec.InitProvider.ManufacturerIDSelector,
+		To: reference.To{
+			List:    &ManufacturerList{},
+			Managed: &Manufacturer{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.ManufacturerID")
+	}
+	mg.Spec.InitProvider.ManufacturerID = reference.ToFloatPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.ManufacturerIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromFloatPtrValue(mg.Spec.InitProvider.ProfileID),
+		Extract:      reference.ExternalName(),
+		Namespace:    mg.GetNamespace(),
+		Reference:    mg.Spec.InitProvider.ProfileIDRef,
+		Selector:     mg.Spec.InitProvider.ProfileIDSelector,
+		To: reference.To{
+			List:    &ModuleTypeProfileList{},
+			Managed: &ModuleTypeProfile{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.ProfileID")
+	}
+	mg.Spec.InitProvider.ProfileID = reference.ToFloatPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.ProfileIDRef = rsp.ResolvedReference
+
+	return nil
+}

@@ -6,13 +6,15 @@ import (
 
 // Terraform resource names used as reference targets.
 const (
-	tfClusterType    = "netbox_cluster_type"
-	tfDevice         = "netbox_device"
-	tfDeviceRole     = "netbox_device_role"
-	tfDeviceType     = "netbox_device_type"
-	tfManufacturer   = "netbox_manufacturer"
-	tfSite           = "netbox_site"
-	tfVirtualMachine = "netbox_virtual_machine"
+	tfClusterType       = "netbox_cluster_type"
+	tfDevice            = "netbox_device"
+	tfDeviceRole        = "netbox_device_role"
+	tfDeviceType        = "netbox_device_type"
+	tfManufacturer      = "netbox_manufacturer"
+	tfModuleType        = "netbox_module_type"
+	tfModuleTypeProfile = "netbox_module_type_profile"
+	tfSite              = "netbox_site"
+	tfVirtualMachine    = "netbox_virtual_machine"
 )
 
 // references maps Terraform resource names to their cross-resource
@@ -31,6 +33,16 @@ var references = map[string]map[string]string{
 	},
 	"netbox_device_type": {
 		"manufacturer_id": tfManufacturer,
+	},
+	"netbox_module_type": {
+		"manufacturer_id": tfManufacturer,
+		"profile_id":      tfModuleTypeProfile,
+	},
+	// A module bay template belongs to exactly one of a device type and a
+	// module type.
+	"netbox_module_bay_template": {
+		"device_type_id": tfDeviceType,
+		"module_type_id": tfModuleType,
 	},
 	"netbox_cluster": {
 		"cluster_type_id": tfClusterType,

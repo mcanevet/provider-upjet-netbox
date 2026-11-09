@@ -1,0 +1,18 @@
+apiVersion: dcim.netbox.crossplane.io/v1alpha1
+kind: ModuleTypeProfile
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/moduletypeprofile
+  labels:
+    testing.upbound.io/example-name: test
+  name: test
+spec:
+  forProvider:
+    description: test-description
+    name: test-module-type-profile
+    schema: |-
+      ${jsonencode({
+          properties = {
+            capacity = { type = "integer" }
+          }
+        })}

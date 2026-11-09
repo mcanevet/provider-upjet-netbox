@@ -53,6 +53,33 @@ func (l *ManufacturerList) GetItems() []resource.Managed {
 	return items
 }
 
+// GetItems of this ModuleBayTemplateList.
+func (l *ModuleBayTemplateList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ModuleTypeList.
+func (l *ModuleTypeList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ModuleTypeProfileList.
+func (l *ModuleTypeProfileList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this SiteList.
 func (l *SiteList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))

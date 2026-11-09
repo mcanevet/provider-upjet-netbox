@@ -22,4 +22,13 @@ func (tr *DeviceType) Hub() {}
 func (tr *Manufacturer) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *ModuleBayTemplate) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ModuleType) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ModuleTypeProfile) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *Site) Hub() {}
