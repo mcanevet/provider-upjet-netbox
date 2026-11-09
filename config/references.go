@@ -4,6 +4,17 @@ import (
 	"github.com/crossplane/upjet/v2/pkg/config"
 )
 
+// Terraform resource names used as reference targets.
+const (
+	tfClusterType    = "netbox_cluster_type"
+	tfDevice         = "netbox_device"
+	tfDeviceRole     = "netbox_device_role"
+	tfDeviceType     = "netbox_device_type"
+	tfManufacturer   = "netbox_manufacturer"
+	tfSite           = "netbox_site"
+	tfVirtualMachine = "netbox_virtual_machine"
+)
+
 // references maps Terraform resource names to their cross-resource
 // references: Terraform argument -> referenced Terraform resource. Each one
 // adds <field>Ref and <field>Selector fields to the CRD, resolved to the
@@ -11,26 +22,26 @@ import (
 var references = map[string]map[string]string{
 	// The arguments NetBox requires (device_type_id, role_id, site_id).
 	"netbox_device": {
-		"device_type_id": "netbox_device_type",
-		"role_id":        "netbox_device_role",
-		"site_id":        "netbox_site",
+		"device_type_id": tfDeviceType,
+		"role_id":        tfDeviceRole,
+		"site_id":        tfSite,
 	},
 	"netbox_device_interface": {
-		"device_id": "netbox_device",
+		"device_id": tfDevice,
 	},
 	"netbox_device_type": {
-		"manufacturer_id": "netbox_manufacturer",
+		"manufacturer_id": tfManufacturer,
 	},
 	"netbox_cluster": {
-		"cluster_type_id": "netbox_cluster_type",
+		"cluster_type_id": tfClusterType,
 	},
 	// NetBox requires a virtual machine to be assigned to a site and/or a
 	// cluster ("A virtual machine must be assigned to a site and/or cluster.").
 	"netbox_virtual_machine": {
-		"site_id": "netbox_site",
+		"site_id": tfSite,
 	},
 	"netbox_virtual_machine_interface": {
-		"virtual_machine_id": "netbox_virtual_machine",
+		"virtual_machine_id": tfVirtualMachine,
 	},
 }
 
