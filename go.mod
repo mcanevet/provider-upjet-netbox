@@ -186,9 +186,10 @@ require (
 //   - crossplane/upjet#792 (fixes #788): numeric ids in the Terraform state.
 //   - two of ours, not upstream yet, for the no-fork (plugin framework) path:
 //     no empty id in the resource config (the counterpart of #789), and
-//     numeric ids normalized after each state conversion (of #792).
+//     numeric ids normalized after each state conversion, including when
+//     recovering an unpersisted external name (of #792).
 // Drop this replace once all of them are released.
-replace github.com/crossplane/upjet/v2 => github.com/mcanevet/upjet/v2 v2.0.0-20261106181023-a115eb451561
+replace github.com/crossplane/upjet/v2 => github.com/mcanevet/upjet/v2 v2.0.0-20261109093839-1aa56891afc2
 
 // e-breuninger/netbox v6.0.0 plus one public package re-exporting the provider
 // constructor (internal/provider cannot be imported by other modules), so that
