@@ -52,4 +52,17 @@ e2e-scenarios: $(KUBECTL) $(CHAINSAW)
 uptest: netbox.deploy
 e2e: e2e-scenarios
 
-.PHONY: netbox.deploy e2e-scenarios
+# Load test (tests/load/run.sh): LOAD_COUNT Site MRs against the in-cluster
+# NetBox, timing create, steady state and delete, and sampling the provider's
+# CPU/memory, reconcile rate and NetBox API calls. Tunables (environment):
+# LOAD_COUNT, LOAD_MAX_RECONCILE_RATE, LOAD_POLL, LOAD_STEADY_SECONDS.
+# Results in _output/load.
+load-test: $(KUBECTL)
+	@$(INFO) running load test
+	@KUBECTL=$(KUBECTL) cluster/test/setup.sh
+	@KUBECTL=$(KUBECTL) NETBOX_VERSION=$(NETBOX_VERSION) LOAD_OUTPUT_DIR=$(OUTPUT_DIR)/load tests/load/run.sh || $(FAIL)
+	@$(OK) running load test
+
+load: local-deploy netbox.deploy load-test
+
+.PHONY: netbox.deploy e2e-scenarios load-test load

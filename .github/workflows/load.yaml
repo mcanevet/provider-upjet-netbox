@@ -1,0 +1,80 @@
+# Load test (tests/load/run.sh): how many managed resources one provider creates
+# and keeps reconciled, and at what CPU/memory and NetBox API cost.
+# Manual only: it runs for a long time and its numbers are only indicative on
+# a shared GitHub runner (4 vCPUs, one kind node also running NetBox).
+name: Load Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      count:
+        description: Site MRs to create
+        default: "1000"
+      max_reconcile_rate:
+        description: Provider --max-reconcile-rate
+        default: "10"
+      poll:
+        description: Provider --poll (drift check interval)
+        default: "10m"
+      steady_seconds:
+        description: Seconds to observe the steady state
+        default: "600"
+      netbox_version:
+        description: NetBox image tag
+        default: "v4.4.10"
+
+permissions:
+  contents: read
+
+jobs:
+  load:
+    name: load (${{ inputs.count }} Sites, rate ${{ inputs.max_reconcile_rate }}, NetBox ${{ inputs.netbox_version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+
+    steps:
+      - name: Cleanup Disk
+        uses: jlumbroso/free-disk-space@ceedf095f4ec1a097402bc6bd80831f2e1a6fde6 # v2.0.0
+        with:
+          large-packages: false
+          swap-storage: false
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: true
+
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+
+      - name: Vendor Dependencies
+        run: make vendor vendor.check
+
+      - name: Run Load Test
+        env:
+          NETBOX_VERSION: ${{ inputs.netbox_version }}
+          LOAD_COUNT: ${{ inputs.count }}
+          LOAD_MAX_RECONCILE_RATE: ${{ inputs.max_reconcile_rate }}
+          LOAD_POLL: ${{ inputs.poll }}
+          LOAD_STEADY_SECONDS: ${{ inputs.steady_seconds }}
+        run: make load
+
+      - name: Job Summary
+        if: always()
+        run: cat _output/load/summary.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "no summary" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Collect Cluster Dump
+        if: failure()
+        run: make controlplane.dump
+
+      - name: Upload Results
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: load-${{ inputs.count }}-rate${{ inputs.max_reconcile_rate }}
+          path: |
+            _output/load
+            _output/controlplane-dump
+          if-no-files-found: ignore
