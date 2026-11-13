@@ -246,6 +246,14 @@ jobs:
     if: needs.detect-noop.outputs.noop != 'true'
 
     steps:
+      # Building the images and packages of both platforms needs more
+      # than the runner's free disk.
+      - name: Cleanup Disk
+        uses: jlumbroso/free-disk-space@ceedf095f4ec1a097402bc6bd80831f2e1a6fde6 # v2.0.0
+        with:
+          large-packages: false
+          swap-storage: false
+
       - name: Setup QEMU
         uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4
         with:
