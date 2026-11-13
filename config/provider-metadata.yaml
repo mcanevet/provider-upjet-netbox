@@ -4921,7 +4921,7 @@ resources:
             - terraform import netbox_prefix.test 123
     netbox_primary_ip:
         subCategory: Virtualization
-        description: Sets the primary IPv4 or IPv6 address of a device or virtual machine. The address must be assigned to one of its interfaces; the family is taken from the address. Import as device/ or vm/.
+        description: Sets the primary IPv4 or IPv6 address of a device or virtual machine. The address must be assigned to one of its interfaces; the family is taken from the address. Import as device//<4 or 6> or vm//<4 or 6>; the IP version can be left out when only one primary IP is set.
         name: netbox_primary_ip
         title: netbox_primary_ip Resource - terraform-provider-netbox
         examples:
@@ -4978,8 +4978,8 @@ resources:
             virtual_machine_id: (Number) Id of the virtual machine. Conflicts with device_id.
         importStatements:
             - |-
-              # device/<device id> or vm/<virtual machine id>
-              terraform import netbox_primary_ip.test device/123
+              # device/<device id>/<4 or 6> or vm/<virtual machine id>/<4 or 6>; the IP version can be left out when only one primary IP is set
+              terraform import netbox_primary_ip.test device/123/4
     netbox_rack:
         subCategory: Data Center Inventory Management (DCIM)
         description: 'A NetBox rack (dcim.rack). From the official documentation https://docs.netbox.dev/en/stable/models/dcim/rack/: The rack model represents a physical two- or four-post equipment rack in which devices can be installed. Each rack must be assigned to a site, and may optionally be assigned to a location within that site. Racks can also be organized by user-defined functional roles. The name and facility ID of each rack within a location must be unique. Rack height is measured in rack units (U); racks are commonly between 42U and 48U tall, but NetBox allows you to define racks of arbitrary height. A toggle is provided to indicate whether rack units are in ascending (from the ground up) or descending order. Each rack is assigned a name and (optionally) a separate facility ID. This is helpful when leasing space in a data center your organization does not own: The facility will often assign a seemingly arbitrary ID to a rack (for example, "M204.313") whereas internally you refer to is simply as "R113." A unique serial number and asset tag may also be associated with each rack.'
@@ -5900,7 +5900,7 @@ resources:
             domain: (String)
             id: (Number) NetBox id.
             last_updated: (String)
-            master_id: (Number) Id of the device acting as chassis master.
+            master_id: (Number) Id of the device acting as chassis master (managed by netbox_virtual_chassis_master).
             member_count: (Number) Number of members of the virtual chassis.
             name: (String)
             owner_id: (Number) Id of the owner the object is assigned to.
@@ -5909,6 +5909,69 @@ resources:
             url: (String)
         importStatements:
             - terraform import netbox_virtual_chassis.test 123
+    netbox_virtual_chassis_master:
+        subCategory: Data Center Inventory Management (DCIM)
+        description: Sets the master device of a virtual chassis. The device must be a member of the chassis (its virtual_chassis_id). Import with the virtual chassis id.
+        name: netbox_virtual_chassis_master
+        title: netbox_virtual_chassis_master Resource - terraform-provider-netbox
+        examples:
+            - name: test
+              manifest: |-
+                {
+                  "device_id": "${netbox_device.member1.id}",
+                  "virtual_chassis_id": "${netbox_virtual_chassis.test.id}"
+                }
+              references:
+                device_id: netbox_device.member1.id
+                virtual_chassis_id: netbox_virtual_chassis.test.id
+              dependencies:
+                netbox_device.member1: |-
+                    {
+                      "device_type_id": "${netbox_device_type.test.id}",
+                      "name": "test-switch-1",
+                      "role_id": "${netbox_device_role.test.id}",
+                      "site_id": "${netbox_site.test.id}",
+                      "virtual_chassis_id": "${netbox_virtual_chassis.test.id}",
+                      "virtual_chassis_position": 1
+                    }
+                netbox_device.member2: |-
+                    {
+                      "device_type_id": "${netbox_device_type.test.id}",
+                      "name": "test-switch-2",
+                      "role_id": "${netbox_device_role.test.id}",
+                      "site_id": "${netbox_site.test.id}",
+                      "virtual_chassis_id": "${netbox_virtual_chassis.test.id}",
+                      "virtual_chassis_position": 2
+                    }
+                netbox_device_role.test: |-
+                    {
+                      "name": "test-device-role"
+                    }
+                netbox_device_type.test: |-
+                    {
+                      "manufacturer_id": "${netbox_manufacturer.test.id}",
+                      "model": "test-device-type"
+                    }
+                netbox_manufacturer.test: |-
+                    {
+                      "name": "test-manufacturer"
+                    }
+                netbox_site.test: |-
+                    {
+                      "name": "test-site"
+                    }
+                netbox_virtual_chassis.test: |-
+                    {
+                      "name": "test-stack"
+                    }
+        argumentDocs:
+            device_id: (Number) Id of the member device to make the chassis master.
+            id: (String) The virtual chassis id.
+            virtual_chassis_id: (Number) Id of the virtual chassis.
+        importStatements:
+            - |-
+              # The id of the virtual chassis.
+              terraform import netbox_virtual_chassis_master.test 123
     netbox_virtual_circuit:
         subCategory: Circuits
         description: 'A NetBox virtual circuit (circuits.virtualcircuit): a layer 2 or 3 service delivered over a provider network. From the official documentation https://netboxlabs.com/docs/netbox/models/circuits/virtualcircuit/: A virtual circuit can connect two or more interfaces atop a set of decoupled physical connections. For example, it''s very common to form a virtual connection between two virtual interfaces, each of which is bound to a physical interface on its respective device and physically connected to a'

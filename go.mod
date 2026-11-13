@@ -11,7 +11,7 @@ require (
 	github.com/crossplane/crossplane-tools v0.0.0-20260719180100-659f1dc036c5
 	github.com/crossplane/crossplane/apis/v2 v2.4.1
 	github.com/crossplane/upjet/v2 v2.5.1
-	github.com/e-breuninger/terraform-provider-netbox v1.6.8-0.20261110151259-d3ff3aa8d06a // v6.0.1
+	github.com/e-breuninger/terraform-provider-netbox v1.6.8-0.20261113160442-1ae3cae64d88 // v6.0.1
 	github.com/hashicorp/terraform-plugin-framework v1.19.0
 	github.com/pkg/errors v0.9.1
 	google.golang.org/grpc v1.83.2
