@@ -57,8 +57,8 @@ github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dlclark/regexp2 v1.11.0 h1:G/nrcoOa7ZXlpoa/91N3X7mM3r8eIlMBBJZvsz/mxKI=
 github.com/dlclark/regexp2 v1.11.0/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
-github.com/e-breuninger/terraform-provider-netbox v1.6.8-0.20261110151259-d3ff3aa8d06a h1:i3T406L+gR7IOMMArtZj5r1O9J2Za0hW3oeBEynj3Xs=
-github.com/e-breuninger/terraform-provider-netbox v1.6.8-0.20261110151259-d3ff3aa8d06a/go.mod h1:8FVoo38ah/MG+zsIdpZlSOxhpBAmXjED+4fwD72xbDI=
+github.com/e-breuninger/terraform-provider-netbox v1.6.8-0.20261113160442-1ae3cae64d88 h1:r9fCOYSlisnWyFx67z3YOcEsMOJ+ZZUpYSnUx/wiAC4=
+github.com/e-breuninger/terraform-provider-netbox v1.6.8-0.20261113160442-1ae3cae64d88/go.mod h1:8FVoo38ah/MG+zsIdpZlSOxhpBAmXjED+4fwD72xbDI=
 github.com/emicklei/go-restful/v3 v3.13.0 h1:C4Bl2xDndpU6nJ4bc1jXd+uTmYPVUwkD6bFY/oTyCes=
 github.com/emicklei/go-restful/v3 v3.13.0/go.mod h1:6n3XBCmQQb25CM2LCACGz8ukIrRry+4bhvbpWn3mrbc=
 github.com/evanphx/json-patch v5.9.11+incompatible h1:ixHHqfcGvxhWkniF1tWxBHA0yb4Z+d1UQi45df52xW8=

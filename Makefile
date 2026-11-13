@@ -12,11 +12,7 @@ TERRAFORM_VERSION_VALID := $(shell [ "$(TERRAFORM_VERSION)" = "`printf "$(TERRAF
 
 export TERRAFORM_PROVIDER_SOURCE ?= e-breuninger/netbox
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/e-breuninger/terraform-provider-netbox
-# The schema and docs come from 6.0.0, while the provider compiled in is
-# v6.0.1 (go.mod): 6.0.1 is not in the Terraform registry (its release
-# workflow failed) and changes no resource or resource doc, only data sources.
-# Bump this to 6.0.1 once the registry has it.
-export TERRAFORM_PROVIDER_VERSION ?= 6.0.0
+export TERRAFORM_PROVIDER_VERSION ?= 6.0.1
 export TERRAFORM_DOCS_PATH ?= docs/resources
 
 
