@@ -13,6 +13,7 @@ require (
 	github.com/crossplane/upjet/v2 v2.5.1
 	github.com/e-breuninger/terraform-provider-netbox v1.6.8-0.20261110151259-d3ff3aa8d06a // v6.0.1
 	github.com/hashicorp/terraform-plugin-framework v1.19.0
+	github.com/hashicorp/terraform-plugin-go v0.31.0
 	github.com/pkg/errors v0.9.1
 	google.golang.org/grpc v1.83.2
 	k8s.io/api v0.36.3
@@ -87,7 +88,6 @@ require (
 	github.com/hashicorp/terraform-json v0.27.3-0.20260213134036-298b8f6b673a // indirect
 	github.com/hashicorp/terraform-plugin-framework-jsontypes v0.2.0 // indirect
 	github.com/hashicorp/terraform-plugin-framework-validators v0.19.0 // indirect
-	github.com/hashicorp/terraform-plugin-go v0.31.0 // indirect
 	github.com/hashicorp/terraform-plugin-log v0.10.0 // indirect
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.40.0 // indirect
 	github.com/hashicorp/terraform-registry-address v0.4.0 // indirect

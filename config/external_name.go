@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/crossplane/upjet/v2/pkg/config"
+	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 )
 
 // ExternalNameConfigs contains all external name configurations for this
@@ -19,7 +20,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	// Not generated (internal/provider/interface_primary_mac_address_resource.go):
 	// its id is a String, the interface's id, and it PATCHes only the
 	// interface's primary_mac_address.
-	"netbox_device_interface_primary_mac_address": config.IdentifierFromProvider,
+	"netbox_device_interface_primary_mac_address": primaryMACAddressExternalName(),
 	"netbox_device_role":                          config.IdentifierFromProvider,
 	"netbox_device_type":                          config.IdentifierFromProvider,
 	"netbox_mac_address":                          config.IdentifierFromProvider,
@@ -38,6 +39,25 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"netbox_cluster_type":              config.IdentifierFromProvider,
 	"netbox_virtual_machine":           config.IdentifierFromProvider,
 	"netbox_virtual_machine_interface": config.IdentifierFromProvider,
+}
+
+// primaryMACAddressExternalName is IdentifierFromProvider for the primary
+// MAC address resources. upjet reads the resource before it is created, with
+// an empty id; unlike the generated resources, which report that as missing,
+// their Read fails with "Invalid id" (interface_primary_mac_address_resource.go
+// in e-breuninger/netbox). That one diagnostic means "not created yet", so
+// that the resource gets created; any other invalid id is still an error.
+func primaryMACAddressExternalName() config.ExternalName {
+	e := config.IdentifierFromProvider
+	e.IsNotFoundDiagnosticFn = func(diags []*tfprotov6.Diagnostic) bool {
+		for _, d := range diags {
+			if d.Severity == tfprotov6.DiagnosticSeverityError && d.Summary == "Invalid id" && d.Detail == `expected an interface id, got ""` {
+				return true
+			}
+		}
+		return false
+	}
+	return e
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the
