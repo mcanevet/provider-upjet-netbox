@@ -189,8 +189,8 @@ require (
 //     no empty id in the resource config (the counterpart of #789), and
 //     numeric ids normalized after each state conversion, including when
 //     recovering an unpersisted external name (of #792).
-//   - one of ours, not proposed yet: no Read of a resource that has no
-//     external name (the no-fork counterpart of #789), which a Read that
-//     parses the id (netbox_device_interface_primary_mac_address) fails.
+//   - crossplane/upjet#818: no Read of a resource that has no external name
+//     (the no-fork counterpart of #789), which a Read that parses the id
+//     (netbox_device_interface_primary_mac_address) fails.
 // Drop this replace once all of them are released.
 replace github.com/crossplane/upjet/v2 => github.com/mcanevet/upjet/v2 v2.0.0-20261113110205-fc84bee5ece0
