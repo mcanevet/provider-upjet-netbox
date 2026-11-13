@@ -258,8 +258,8 @@ github.com/mattn/go-isatty v0.0.12/go.mod h1:cbi8OIDigv2wuxKPP5vlRcQ1OAZbq2CE4Ky
 github.com/mattn/go-isatty v0.0.14/go.mod h1:7GGIvUiUoEMVVmxf/4nioHXj79iQHKdU27kJ6hsGG94=
 github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWEY=
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
-github.com/mcanevet/upjet/v2 v2.0.0-20261109093839-1aa56891afc2 h1:nGOkGhMVCxbhVbrZpZuSYdiMtxDfsJY8Nl9GRMJpf18=
-github.com/mcanevet/upjet/v2 v2.0.0-20261109093839-1aa56891afc2/go.mod h1:mk+Me18gPUhsQMWgg225vOsGeFocD9/GYI6opMSgHzk=
+github.com/mcanevet/upjet/v2 v2.0.0-20261113110205-fc84bee5ece0 h1:gURyu/Z/iK97olf8WXoY51b2Njgftkw41iLE6bwtks8=
+github.com/mcanevet/upjet/v2 v2.0.0-20261113110205-fc84bee5ece0/go.mod h1:mk+Me18gPUhsQMWgg225vOsGeFocD9/GYI6opMSgHzk=
 github.com/mitchellh/copystructure v1.2.0 h1:vpKXTN4ewci03Vljg/q9QvCGUDttBOGBIa15WveJJGw=
 github.com/mitchellh/copystructure v1.2.0/go.mod h1:qLl+cE2AmVv+CoeAwDPye/v+N2HKCj9FbZEVFJRxO9s=
 github.com/mitchellh/go-ps v1.0.0 h1:i6ampVEEF4wQFF+bkYfwYgY+F/uYJDktmvLPf7qIgjc=

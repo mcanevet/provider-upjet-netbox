@@ -13,7 +13,6 @@ require (
 	github.com/crossplane/upjet/v2 v2.5.1
 	github.com/e-breuninger/terraform-provider-netbox v1.6.8-0.20261110151259-d3ff3aa8d06a // v6.0.1
 	github.com/hashicorp/terraform-plugin-framework v1.19.0
-	github.com/hashicorp/terraform-plugin-go v0.31.0
 	github.com/pkg/errors v0.9.1
 	google.golang.org/grpc v1.83.2
 	k8s.io/api v0.36.3
@@ -88,6 +87,7 @@ require (
 	github.com/hashicorp/terraform-json v0.27.3-0.20260213134036-298b8f6b673a // indirect
 	github.com/hashicorp/terraform-plugin-framework-jsontypes v0.2.0 // indirect
 	github.com/hashicorp/terraform-plugin-framework-validators v0.19.0 // indirect
+	github.com/hashicorp/terraform-plugin-go v0.31.0 // indirect
 	github.com/hashicorp/terraform-plugin-log v0.10.0 // indirect
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.40.0 // indirect
 	github.com/hashicorp/terraform-registry-address v0.4.0 // indirect
@@ -181,13 +181,16 @@ require (
 // e-breuninger/netbox v6 is a terraform-plugin-framework provider whose "id"
 // is an Int64. upjet v2.5.1 needs unmerged fixes for that, combined on
 // https://github.com/mcanevet/upjet/tree/netbox-v2.5.1 (v2.5.1 + the PRs'
-// commits, unchanged, + one of ours):
+// commits):
 //   - crossplane/upjet#789 (fixes #785): no synthetic state with an empty id,
 //     which framework providers reject before Create ever runs.
 //   - crossplane/upjet#792 (fixes #788): numeric ids in the Terraform state.
-//   - two of ours, not upstream yet, for the no-fork (plugin framework) path:
+//   - crossplane/upjet#813 and #814, for the no-fork (plugin framework) path:
 //     no empty id in the resource config (the counterpart of #789), and
 //     numeric ids normalized after each state conversion, including when
 //     recovering an unpersisted external name (of #792).
+//   - one of ours, not proposed yet: no Read of a resource that has no
+//     external name (the no-fork counterpart of #789), which a Read that
+//     parses the id (netbox_device_interface_primary_mac_address) fails.
 // Drop this replace once all of them are released.
-replace github.com/crossplane/upjet/v2 => github.com/mcanevet/upjet/v2 v2.0.0-20261109093839-1aa56891afc2
+replace github.com/crossplane/upjet/v2 => github.com/mcanevet/upjet/v2 v2.0.0-20261113110205-fc84bee5ece0
