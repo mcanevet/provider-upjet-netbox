@@ -47,7 +47,6 @@ func GetProvider() *ujconfig.Provider {
 			ExternalNameConfigurations(),
 			GroupKindOverrides(),
 			References(),
-			LateInitOverrides(),
 		))
 
 	for _, configure := range []func(provider *ujconfig.Provider){
@@ -74,7 +73,6 @@ func GetProviderNamespaced() *ujconfig.Provider {
 			ExternalNameConfigurations(),
 			GroupKindOverrides(),
 			References(),
-			LateInitOverrides(),
 		),
 		ujconfig.WithExampleManifestConfiguration(ujconfig.ExampleManifestConfiguration{
 			ManagedResourceNamespace: "crossplane-system",
