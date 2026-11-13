@@ -100,3 +100,40 @@ spec:
     description: created by uptest
     deviceIdRef:
       name: e2e
+
+---
+
+apiVersion: dcim.netbox.crossplane.io/v1alpha1
+kind: MACAddress
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: e2e-device
+  name: e2e-device
+spec:
+  forProvider:
+    macAddress: "02:00:00:00:00:02"
+    description: created by uptest
+    deviceInterfaceIdRef:
+      name: e2e-device
+
+---
+
+# Makes the MAC address the interface's primary one, changing only that field
+# of the interface.
+apiVersion: dcim.netbox.crossplane.io/v1alpha1
+kind: DeviceInterfacePrimaryMACAddress
+metadata:
+  annotations:
+    meta.upbound.io/example-id: dcim/v1alpha1/device
+  labels:
+    testing.upbound.io/example-name: e2e-device
+  name: e2e-device
+spec:
+  forProvider:
+    deviceInterfaceIdRef:
+      name: e2e-device
+    macAddressIdRef:
+      name: e2e-device
+

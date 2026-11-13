@@ -13,10 +13,16 @@ func (tr *Device) Hub() {}
 func (tr *DeviceInterface) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *DeviceInterfacePrimaryMACAddress) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *DeviceRole) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *DeviceType) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *MACAddress) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *Manufacturer) Hub() {}

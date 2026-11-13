@@ -108,6 +108,56 @@ func (mg *DeviceInterface) SetWriteConnectionSecretToReference(r *xpv2.SecretRef
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
+// GetCondition of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetDeletionPolicy of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) GetDeletionPolicy() xpv2.DeletionPolicy {
+	return mg.Spec.DeletionPolicy
+}
+
+// GetManagementPolicies of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) GetManagementPolicies() xpv2.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) GetProviderConfigReference() *xpv2.Reference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) GetWriteConnectionSecretToReference() *xpv2.SecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) SetConditions(c ...xpv2.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetDeletionPolicy of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) SetDeletionPolicy(r xpv2.DeletionPolicy) {
+	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) SetManagementPolicies(r xpv2.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) SetProviderConfigReference(r *xpv2.Reference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
 // GetCondition of this DeviceRole.
 func (mg *DeviceRole) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
@@ -205,6 +255,56 @@ func (mg *DeviceType) SetProviderConfigReference(r *xpv2.Reference) {
 
 // SetWriteConnectionSecretToReference of this DeviceType.
 func (mg *DeviceType) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this MACAddress.
+func (mg *MACAddress) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetDeletionPolicy of this MACAddress.
+func (mg *MACAddress) GetDeletionPolicy() xpv2.DeletionPolicy {
+	return mg.Spec.DeletionPolicy
+}
+
+// GetManagementPolicies of this MACAddress.
+func (mg *MACAddress) GetManagementPolicies() xpv2.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this MACAddress.
+func (mg *MACAddress) GetProviderConfigReference() *xpv2.Reference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this MACAddress.
+func (mg *MACAddress) GetWriteConnectionSecretToReference() *xpv2.SecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this MACAddress.
+func (mg *MACAddress) SetConditions(c ...xpv2.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetDeletionPolicy of this MACAddress.
+func (mg *MACAddress) SetDeletionPolicy(r xpv2.DeletionPolicy) {
+	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this MACAddress.
+func (mg *MACAddress) SetManagementPolicies(r xpv2.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this MACAddress.
+func (mg *MACAddress) SetProviderConfigReference(r *xpv2.Reference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this MACAddress.
+func (mg *MACAddress) SetWriteConnectionSecretToReference(r *xpv2.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 

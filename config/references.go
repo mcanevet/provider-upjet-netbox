@@ -8,8 +8,10 @@ import (
 const (
 	tfClusterType       = "netbox_cluster_type"
 	tfDevice            = "netbox_device"
+	tfDeviceInterface   = "netbox_device_interface"
 	tfDeviceRole        = "netbox_device_role"
 	tfDeviceType        = "netbox_device_type"
+	tfMACAddress        = "netbox_mac_address"
 	tfManufacturer      = "netbox_manufacturer"
 	tfModuleTypeProfile = "netbox_module_type_profile"
 	tfSite              = "netbox_site"
@@ -29,6 +31,17 @@ var references = map[string]map[string]string{
 	},
 	"netbox_device_interface": {
 		"device_id": tfDevice,
+	},
+	// The typed alternative to the assigned_object_type/_id pair. No reference
+	// for virtual_machine_interface_id: the virtualization group already refers
+	// to dcim (a virtual machine's site), and Go packages can't import each
+	// other.
+	"netbox_mac_address": {
+		"device_interface_id": tfDeviceInterface,
+	},
+	"netbox_device_interface_primary_mac_address": {
+		"device_interface_id": tfDeviceInterface,
+		"mac_address_id":      tfMACAddress,
 	},
 	"netbox_device_type": {
 		"manufacturer_id": tfManufacturer,

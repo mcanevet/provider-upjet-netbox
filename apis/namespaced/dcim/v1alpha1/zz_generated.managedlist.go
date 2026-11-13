@@ -17,6 +17,15 @@ func (l *DeviceInterfaceList) GetItems() []resource.Managed {
 	return items
 }
 
+// GetItems of this DeviceInterfacePrimaryMACAddressList.
+func (l *DeviceInterfacePrimaryMACAddressList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this DeviceList.
 func (l *DeviceList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
@@ -37,6 +46,15 @@ func (l *DeviceRoleList) GetItems() []resource.Managed {
 
 // GetItems of this DeviceTypeList.
 func (l *DeviceTypeList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this MACAddressList.
+func (l *MACAddressList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]

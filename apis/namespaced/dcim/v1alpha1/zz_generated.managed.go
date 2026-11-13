@@ -88,6 +88,46 @@ func (mg *DeviceInterface) SetWriteConnectionSecretToReference(r *xpv2.LocalSecr
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
+// GetCondition of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) GetManagementPolicies() xpv2.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) GetProviderConfigReference() *xpv2.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) GetWriteConnectionSecretToReference() *xpv2.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) SetConditions(c ...xpv2.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) SetManagementPolicies(r xpv2.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) SetProviderConfigReference(r *xpv2.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this DeviceInterfacePrimaryMACAddress.
+func (mg *DeviceInterfacePrimaryMACAddress) SetWriteConnectionSecretToReference(r *xpv2.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
 // GetCondition of this DeviceRole.
 func (mg *DeviceRole) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
 	return mg.Status.GetCondition(ct)
@@ -165,6 +205,46 @@ func (mg *DeviceType) SetProviderConfigReference(r *xpv2.ProviderConfigReference
 
 // SetWriteConnectionSecretToReference of this DeviceType.
 func (mg *DeviceType) SetWriteConnectionSecretToReference(r *xpv2.LocalSecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this MACAddress.
+func (mg *MACAddress) GetCondition(ct xpv2.ConditionType) xpv2.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetManagementPolicies of this MACAddress.
+func (mg *MACAddress) GetManagementPolicies() xpv2.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this MACAddress.
+func (mg *MACAddress) GetProviderConfigReference() *xpv2.ProviderConfigReference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetWriteConnectionSecretToReference of this MACAddress.
+func (mg *MACAddress) GetWriteConnectionSecretToReference() *xpv2.LocalSecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this MACAddress.
+func (mg *MACAddress) SetConditions(c ...xpv2.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetManagementPolicies of this MACAddress.
+func (mg *MACAddress) SetManagementPolicies(r xpv2.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this MACAddress.
+func (mg *MACAddress) SetProviderConfigReference(r *xpv2.ProviderConfigReference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetWriteConnectionSecretToReference of this MACAddress.
+func (mg *MACAddress) SetWriteConnectionSecretToReference(r *xpv2.LocalSecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 

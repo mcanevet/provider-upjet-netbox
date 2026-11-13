@@ -11,8 +11,10 @@ import (
 
 	device "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/device"
 	deviceinterface "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/deviceinterface"
+	deviceinterfaceprimarymacaddress "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/deviceinterfaceprimarymacaddress"
 	devicerole "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/devicerole"
 	devicetype "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/devicetype"
+	macaddress "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/macaddress"
 	manufacturer "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/manufacturer"
 	moduletype "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/moduletype"
 	moduletypeprofile "github.com/mcanevet/provider-upjet-netbox/internal/controller/cluster/dcim/moduletypeprofile"
@@ -34,8 +36,10 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		device.Setup,
 		deviceinterface.Setup,
+		deviceinterfaceprimarymacaddress.Setup,
 		devicerole.Setup,
 		devicetype.Setup,
+		macaddress.Setup,
 		manufacturer.Setup,
 		moduletype.Setup,
 		moduletypeprofile.Setup,
@@ -63,8 +67,10 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		device.SetupGated,
 		deviceinterface.SetupGated,
+		deviceinterfaceprimarymacaddress.SetupGated,
 		devicerole.SetupGated,
 		devicetype.SetupGated,
+		macaddress.SetupGated,
 		manufacturer.SetupGated,
 		moduletype.SetupGated,
 		moduletypeprofile.SetupGated,
@@ -91,8 +97,10 @@ func SetupWebhookWithManager(mgr ctrl.Manager) error {
 	for _, setup := range []func(ctrl.Manager) error{
 		device.SetupWebhookWithManager,
 		deviceinterface.SetupWebhookWithManager,
+		deviceinterfaceprimarymacaddress.SetupWebhookWithManager,
 		devicerole.SetupWebhookWithManager,
 		devicetype.SetupWebhookWithManager,
+		macaddress.SetupWebhookWithManager,
 		manufacturer.SetupWebhookWithManager,
 		moduletype.SetupWebhookWithManager,
 		moduletypeprofile.SetupWebhookWithManager,

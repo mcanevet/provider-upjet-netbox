@@ -14,14 +14,19 @@ import (
 // crossplane/upjet#792 (see the replace directive in go.mod).
 var ExternalNameConfigs = map[string]config.ExternalName{
 	// dcim
-	"netbox_device":              config.IdentifierFromProvider,
-	"netbox_device_interface":    config.IdentifierFromProvider,
-	"netbox_device_role":         config.IdentifierFromProvider,
-	"netbox_device_type":         config.IdentifierFromProvider,
-	"netbox_manufacturer":        config.IdentifierFromProvider,
-	"netbox_module_type":         config.IdentifierFromProvider,
-	"netbox_module_type_profile": config.IdentifierFromProvider,
-	"netbox_site":                config.IdentifierFromProvider,
+	"netbox_device":           config.IdentifierFromProvider,
+	"netbox_device_interface": config.IdentifierFromProvider,
+	// Not generated (internal/provider/interface_primary_mac_address_resource.go):
+	// its id is a String, the interface's id, and it PATCHes only the
+	// interface's primary_mac_address.
+	"netbox_device_interface_primary_mac_address": config.IdentifierFromProvider,
+	"netbox_device_role":                          config.IdentifierFromProvider,
+	"netbox_device_type":                          config.IdentifierFromProvider,
+	"netbox_mac_address":                          config.IdentifierFromProvider,
+	"netbox_manufacturer":                         config.IdentifierFromProvider,
+	"netbox_module_type":                          config.IdentifierFromProvider,
+	"netbox_module_type_profile":                  config.IdentifierFromProvider,
+	"netbox_site":                                 config.IdentifierFromProvider,
 	// tenancy
 	"netbox_tenant": config.IdentifierFromProvider,
 	// ipam
