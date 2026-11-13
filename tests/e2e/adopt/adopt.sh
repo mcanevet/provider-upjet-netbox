@@ -46,6 +46,11 @@ eno1_mac_before=$(before "dcim/mac-addresses/$eno1_mac/")
 echo "NetBox: device $device, bmc0 $bmc, eno1 $eno1 (MAC $eno1_mac)"
 
 # --- what a composition renders for the device ----------------------------------
+# Interfaces and MAC addresses: Observe, Create and LateInitialize, no Update
+# and no Delete. LateInitialize is needed for a created object: upjet creates
+# asynchronously and records the external name (its NetBox ID) on the next
+# Observe, as a spec change that is only persisted with LateInitialize. With
+# no Update, the values it copies from NetBox are never written back.
 
 $k -n "$ns" apply -f - <<EOF
 apiVersion: dcim.netbox.m.crossplane.io/v1alpha1
@@ -68,7 +73,7 @@ metadata:
   annotations:
     crossplane.io/external-name: "$eno1"
 spec:
-  managementPolicies: ["Observe", "Create"]
+  managementPolicies: ["Observe", "Create", "LateInitialize"]
   forProvider:
     name: eno1
     type: 1000base-t
@@ -83,7 +88,7 @@ metadata:
   annotations:
     crossplane.io/external-name: "$eno1_mac"
 spec:
-  managementPolicies: ["Observe", "Create"]
+  managementPolicies: ["Observe", "Create", "LateInitialize"]
   forProvider:
     macAddress: "02:00:00:00:AA:01"
     deviceInterfaceIdRef: {name: e2e-adopt-eno1}
@@ -95,7 +100,7 @@ kind: DeviceInterface
 metadata:
   name: e2e-adopt-eno2
 spec:
-  managementPolicies: ["Observe", "Create"]
+  managementPolicies: ["Observe", "Create", "LateInitialize"]
   forProvider:
     name: eno2
     type: 1000base-t
@@ -108,7 +113,7 @@ kind: MACAddress
 metadata:
   name: e2e-adopt-eno2
 spec:
-  managementPolicies: ["Observe", "Create"]
+  managementPolicies: ["Observe", "Create", "LateInitialize"]
   forProvider:
     macAddress: "02:00:00:00:AA:02"
     deviceInterfaceIdRef: {name: e2e-adopt-eno2}
