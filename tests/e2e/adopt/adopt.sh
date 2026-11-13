@@ -69,7 +69,6 @@ metadata:
     crossplane.io/external-name: "$eno1"
 spec:
   managementPolicies: ["Observe", "Create"]
-  deletionPolicy: Orphan
   forProvider:
     name: eno1
     type: 1000base-t
@@ -85,7 +84,6 @@ metadata:
     crossplane.io/external-name: "$eno1_mac"
 spec:
   managementPolicies: ["Observe", "Create"]
-  deletionPolicy: Orphan
   forProvider:
     macAddress: "02:00:00:00:AA:01"
     deviceInterfaceIdRef: {name: e2e-adopt-eno1}
@@ -98,7 +96,6 @@ metadata:
   name: e2e-adopt-eno2
 spec:
   managementPolicies: ["Observe", "Create"]
-  deletionPolicy: Orphan
   forProvider:
     name: eno2
     type: 1000base-t
@@ -112,7 +109,6 @@ metadata:
   name: e2e-adopt-eno2
 spec:
   managementPolicies: ["Observe", "Create"]
-  deletionPolicy: Orphan
   forProvider:
     macAddress: "02:00:00:00:AA:02"
     deviceInterfaceIdRef: {name: e2e-adopt-eno2}
@@ -123,7 +119,10 @@ kind: DeviceInterfacePrimaryMACAddress
 metadata:
   name: e2e-adopt-eno2
 spec:
-  deletionPolicy: Orphan
+  # Every policy but Delete: deleting the MR leaves the primary MAC address
+  # set. Namespaced MRs have no deletionPolicy; leaving out Delete is how they
+  # orphan.
+  managementPolicies: ["Observe", "Create", "Update", "LateInitialize"]
   forProvider:
     deviceInterfaceIdRef: {name: e2e-adopt-eno2}
     macAddressIdRef: {name: e2e-adopt-eno2}

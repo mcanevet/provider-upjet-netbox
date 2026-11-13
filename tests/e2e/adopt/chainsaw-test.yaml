@@ -8,9 +8,10 @@ spec:
     Writing discovered interfaces and MAC addresses to a device that other
     teams own: the Device is observed only; interfaces and MAC addresses are
     created when missing and adopted by NetBox ID when they exist, but never
-    updated (management policies Observe and Create); the primary MAC address
-    is set by a PATCH of that one field. Nothing set in NetBox outside
-    Crossplane changes, and deleting the MRs leaves NetBox as it is.
+    updated nor deleted (management policies Observe and Create); the primary
+    MAC address is set by a PATCH of that one field, and not cleared on
+    deletion (no Delete policy). Nothing set in NetBox outside Crossplane
+    changes, and deleting the MRs leaves NetBox as it is.
   steps:
     - name: adopt existing objects, create missing ones, change nothing else
       try:
