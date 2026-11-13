@@ -69,8 +69,10 @@ jobs:
         if: failure()
         run: make controlplane.dump
 
+      # The results are the point of the run: always uploaded, kept a month.
       - name: Upload Results
         if: always()
+        continue-on-error: true
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: load-${{ inputs.count }}-rate${{ inputs.max_reconcile_rate }}
@@ -78,3 +80,4 @@ jobs:
             _output/load
             _output/controlplane-dump
           if-no-files-found: ignore
+          retention-days: 30
