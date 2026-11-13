@@ -15,10 +15,11 @@ const (
 	modulePath     = "github.com/mcanevet/provider-upjet-netbox"
 )
 
-// terraformProviderVersion is reported by the in-process provider; it must
-// match TERRAFORM_PROVIDER_VERSION in the Makefile (config/schema.json was
-// generated from that release).
-const terraformProviderVersion = "6.0.0"
+// terraformProviderVersion is reported by the in-process provider: the
+// e-breuninger/netbox release in go.mod. config/schema.json comes from
+// TERRAFORM_PROVIDER_VERSION in the Makefile, which may lag behind when the
+// releases have the same resource schemas (see there).
+const terraformProviderVersion = "6.0.1"
 
 // FrameworkProvider returns the e-breuninger/netbox provider, served
 // in-process (upjet's no-fork mode) instead of through the Terraform CLI.

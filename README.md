@@ -4,7 +4,7 @@
 [NetBox](https://netboxlabs.com/), built with
 [Upjet](https://github.com/crossplane/upjet) code generation on top of the
 [e-breuninger/netbox](https://github.com/e-breuninger/terraform-provider-netbox)
-Terraform provider (v6.0.0).
+Terraform provider (v6.0.1).
 
 > **Status: experimental.** Only a small allowlist of resources is generated
 > (see `config/external_name.go`). It has not been tested against a live NetBox.
