@@ -2,6 +2,19 @@ apiVersion: meta.pkg.crossplane.io/v1
 kind: Provider
 metadata:
   name: provider-upjet-netbox
+  annotations:
+    meta.crossplane.io/maintainer: Mickaël Canévet <mickael.canevet@proton.ch>
+    meta.crossplane.io/source: github.com/mcanevet/provider-upjet-netbox
+    meta.crossplane.io/license: Apache-2.0
+    meta.crossplane.io/description: |
+      The NetBox Crossplane provider adds support for managing NetBox
+      resources in Kubernetes.
+    meta.crossplane.io/readme: |
+      `provider-upjet-netbox` is a Crossplane provider for
+      [NetBox](https://netboxlabs.com/), built with Upjet on top of the
+      e-breuninger/netbox Terraform provider. Read the
+      [readme](https://github.com/mcanevet/provider-upjet-netbox/blob/main/README.md)
+      for instructions.
 spec:
   capabilities:
     - SafeStart

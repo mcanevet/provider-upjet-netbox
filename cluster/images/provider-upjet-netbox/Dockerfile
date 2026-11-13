@@ -1,5 +1,5 @@
 FROM alpine:3.24.3
-RUN apk --no-cache add ca-certificates
+RUN apk --no-cache upgrade && apk --no-cache add ca-certificates
 
 ARG TARGETOS
 ARG TARGETARCH
